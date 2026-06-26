@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A Chang Learns - Parent Highly Capable & SEL Prep Dashboard</title>
+  <meta name="description" content="A local-first parent-facing utility to systematically prepare Ada for 1st Grade Highly Capable (HiCap) testing and elevate Social-Emotional Intelligence.">
+  
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brandBg: '#0b0f19',
+            brandSurface: '#151c2c',
+            brandSurfaceHover: '#1e293b',
+            brandBorder: '#334155',
+            brandPrimary: '#6366f1',
+            brandAccent: '#f59e0b',
+            brandSuccess: '#10b981',
+            brandError: '#ef4444',
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Custom CSS file -->
+  <link rel="stylesheet" href="./src/style.css">
+</head>
+<body class="bg-brandBg text-slate-100 flex flex-col min-full pb-12">
+
+  <!-- Header Banner -->
+  <header class="no-print border-b border-brandBorder bg-brandSurface/80 backdrop-blur-md sticky top-0 z-50">
+    <div class="max-w-4xl mx-auto px-4 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div>
+        <h1 class="text-2xl font-extrabold tracking-tight text-white flex items-center gap-2">
+          <span>A CHANG LEARNS</span>
+          <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-brandPrimary/20 text-brandPrimary border border-brandPrimary/30">Parent Dashboard</span>
+        </h1>
+        <p class="text-xs text-slate-400 mt-1">Student: <span class="font-semibold text-slate-200">Ada</span> | Objective: 95th+ Percentile HiCap Prep & SEL Mastery</p>
+      </div>
+
+      <!-- Live Level Badges with Manual Controls -->
+      <div class="flex items-center gap-2">
+        <div class="bg-slate-900 border border-brandBorder px-2.5 py-1 rounded-lg text-center flex flex-col items-center">
+          <span class="block text-[8px] uppercase font-bold text-slate-400 tracking-wider">Math</span>
+          <div class="flex items-center gap-1.5 mt-0.5">
+            <button onclick="window.adjustLevel('math', -1)" class="w-5 h-5 flex items-center justify-center rounded bg-slate-800 hover:bg-slate-700 text-xs font-extrabold text-slate-300 transition-colors select-none">-</button>
+            <span id="header-math-level" class="text-sm font-black text-brandAccent">1</span>
+            <button onclick="window.adjustLevel('math', 1)" class="w-5 h-5 flex items-center justify-center rounded bg-slate-800 hover:bg-slate-700 text-xs font-extrabold text-slate-300 transition-colors select-none">+</button>
+          </div>
+        </div>
+        <div class="bg-slate-900 border border-brandBorder px-2.5 py-1 rounded-lg text-center flex flex-col items-center">
+          <span class="block text-[8px] uppercase font-bold text-slate-400 tracking-wider">Verbal</span>
+          <div class="flex items-center gap-1.5 mt-0.5">
+            <button onclick="window.adjustLevel('reading', -1)" class="w-5 h-5 flex items-center justify-center rounded bg-slate-800 hover:bg-slate-700 text-xs font-extrabold text-slate-300 transition-colors select-none">-</button>
+            <span id="header-reading-level" class="text-sm font-black text-brandPrimary">1</span>
+            <button onclick="window.adjustLevel('reading', 1)" class="w-5 h-5 flex items-center justify-center rounded bg-slate-800 hover:bg-slate-700 text-xs font-extrabold text-slate-300 transition-colors select-none">+</button>
+          </div>
+        </div>
+        <div class="bg-slate-900 border border-brandBorder px-2.5 py-1 rounded-lg text-center flex flex-col items-center">
+          <span class="block text-[8px] uppercase font-bold text-slate-400 tracking-wider">SEL</span>
+          <div class="flex items-center gap-1.5 mt-0.5">
+            <button onclick="window.adjustLevel('sel', -1)" class="w-5 h-5 flex items-center justify-center rounded bg-slate-800 hover:bg-slate-700 text-xs font-extrabold text-slate-300 transition-colors select-none">-</button>
+            <span id="header-sel-level" class="text-sm font-black text-brandSuccess">1</span>
+            <button onclick="window.adjustLevel('sel', 1)" class="w-5 h-5 flex items-center justify-center rounded bg-slate-800 hover:bg-slate-700 text-xs font-extrabold text-slate-300 transition-colors select-none">+</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-grow max-w-4xl w-full mx-auto px-4 py-6">
+
+    <!-- Print Only Header -->
+    <div class="hidden print:block mb-6 border-b-2 border-black pb-4">
+      <h1 class="text-3xl font-extrabold text-black">A CHANG LEARNS: DAILY SESSION SHEET</h1>
+      <p class="text-sm text-black mt-1">Student: Ada | Date: <span id="print-date"></span></p>
+      <p class="text-xs text-black">Current Tiers: Math Level <span id="print-math-level">1</span> | Verbal Level <span id="print-reading-level">1</span> | SEL Level <span id="print-sel-level">1</span></p>
+    </div>
+
+    <!-- Curriculum Levels Legend (Collapsible) -->
+    <section class="no-print mb-6 bg-brandSurface border border-brandBorder rounded-2xl shadow-xl overflow-hidden transition-all duration-300">
+      <button onclick="toggleLegend()" class="w-full px-5 py-4 flex items-center justify-between text-left font-bold text-white hover:bg-brandSurfaceHover transition-colors focus:outline-none select-none">
+        <div class="flex items-center gap-3">
+          <span class="w-2.5 h-2.5 rounded-full bg-brandAccent animate-pulse"></span>
+          <span class="text-sm sm:text-base tracking-wide font-extrabold uppercase">Curriculum Levels & Testing Legend (K - 5th Grade)</span>
+        </div>
+        <svg id="legend-chevron" class="w-5 h-5 text-slate-400 transform transition-transform duration-300" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+      </button>
+      
+      <div id="legend-content" class="hidden border-t border-brandBorder/40 bg-slate-900/40 p-5 space-y-6">
+        <!-- Legend Explanation Intro -->
+        <p class="text-xs text-slate-400 leading-relaxed font-normal">
+          Highly Capable (HiCap) testing (e.g. <strong>Naglieri General Abilities Test</strong> & <strong>Iowa Assessments</strong>) typically evaluates students at one or more grade levels above their current placement. This curriculum scales from early foundations up to 5th-grade elite levels to systematically build cognitive stamina, spatial reasoning, and social-emotional growth as Ada grows.
+        </p>
+
+        <!-- Grid of levels -->
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+          <!-- Level 1 -->
+          <div class="p-3.5 bg-slate-950/60 border border-brandBorder/30 rounded-xl space-y-2 text-xs">
+            <span class="block font-black text-brandAccent uppercase tracking-wide">Level 1: Early Prep (K - 1st)</span>
+            <div class="space-y-1.5 text-slate-300 font-normal leading-relaxed">
+              <p><strong>Math:</strong> Sequencing, crosses 100 boundary, skip count by 5s/10s.</p>
+              <p><strong>Verbal:</strong> Phonics sounds, rhyming patterns, direct-recall stories.</p>
+              <p><strong>SEL:</strong> Primary emotion recognition, empathy checks.</p>
+            </div>
+          </div>
+          <!-- Level 2 -->
+          <div class="p-3.5 bg-slate-950/60 border border-brandBorder/30 rounded-xl space-y-2 text-xs">
+            <span class="block font-black text-brandPrimary uppercase tracking-wide">Level 2: Explorer (1st - 2nd)</span>
+            <div class="space-y-1.5 text-slate-300 font-normal leading-relaxed">
+              <p><strong>Math:</strong> Single-digit equations, simple 2x2 shape matrices, side patterns.</p>
+              <p><strong>Verbal:</strong> Context vocab (timid, curious), antonym/synonym analogies.</p>
+              <p><strong>SEL:</strong> Managing nervousness, sharing & cooperating.</p>
+            </div>
+          </div>
+          <!-- Level 3 -->
+          <div class="p-3.5 bg-slate-950/60 border border-brandBorder/30 rounded-xl space-y-2 text-xs">
+            <span class="block font-black text-brandSuccess uppercase tracking-wide">Level 3: Analyst (2nd - 3rd)</span>
+            <div class="space-y-1.5 text-slate-300 font-normal leading-relaxed">
+              <p><strong>Math:</strong> Double-digit regrouping, logic balance scales, shape flipping.</p>
+              <p><strong>Verbal:</strong> Character motivations, advanced vocab, idiom (成语) translations.</p>
+              <p><strong>SEL:</strong> Polite execution scripts, grit & frustration tolerance.</p>
+            </div>
+          </div>
+          <!-- Level 4 -->
+          <div class="p-3.5 bg-slate-950/60 border border-brandBorder/30 rounded-xl space-y-2 text-xs">
+            <span class="block font-black text-amber-500 uppercase tracking-wide">Level 4: Scholar (3rd - 4th)</span>
+            <div class="space-y-1.5 text-slate-300 font-normal leading-relaxed">
+              <p><strong>Math:</strong> 3D block counts, multiplication logic rules, gap pattern series.</p>
+              <p><strong>Verbal:</strong> Semantic analogies, deep metaphor idioms.</p>
+              <p><strong>SEL:</strong> Peer conflict resolution, self-advocacy roleplay.</p>
+            </div>
+          </div>
+          <!-- Level 5 -->
+          <div class="p-3.5 bg-slate-950/60 border border-brandBorder/30 rounded-xl space-y-2 text-xs">
+            <span class="block font-black text-emerald-400 uppercase tracking-wide">Level 5: Gifted Elite (4th - 5th)</span>
+            <div class="space-y-1.5 text-slate-300 font-normal leading-relaxed">
+              <p><strong>Math:</strong> Paper-folding geometry, multi-attribute matrices, scale systems.</p>
+              <p><strong>Verbal:</strong> Abstract analogies, complex text structure reading.</p>
+              <p><strong>SEL:</strong> Perspective taking, emotional regulation under pressure.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Navigation Tabs (Touch Friendly) -->
+    <nav class="no-print flex border-b border-brandBorder mb-6 bg-brandSurface/40 p-2 rounded-2xl gap-2" aria-label="Dashboard Navigation">
+      <button id="tab-quest-btn" class="flex-1 py-4 px-2 sm:px-4 rounded-xl text-center text-base sm:text-lg font-bold tracking-wide flex items-center justify-center gap-2 transition-all bg-brandPrimary text-white shadow-lg" onclick="switchTab('quest')">
+        <svg class="w-5 fill-none stroke-current stroke-2" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+        Today's Quest
+      </button>
+      <button id="tab-log-btn" class="flex-1 py-4 px-2 sm:px-4 rounded-xl text-center text-base sm:text-lg font-bold tracking-wide text-slate-400 hover:text-white flex items-center justify-center gap-2 transition-all hover:bg-slate-800" onclick="switchTab('log')">
+        <svg class="w-5 fill-none stroke-current stroke-2" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+        30s Log
+      </button>
+      <button id="tab-progress-btn" class="flex-1 py-4 px-2 sm:px-4 rounded-xl text-center text-base sm:text-lg font-bold tracking-wide text-slate-400 hover:text-white flex items-center justify-center gap-2 transition-all hover:bg-slate-800" onclick="switchTab('progress')">
+        <svg class="w-5 fill-none stroke-current stroke-2" viewBox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 002 2h2a2 2 0 002-2"/></svg>
+        Progress
+      </button>
+    </nav>
+
+    <!-- Tab 1: Today's Session Sheet -->
+    <div id="tab-quest" class="tab-content active">
+      <div class="no-print flex items-center justify-between mb-4">
+        <h2 class="text-xl font-bold text-white flex items-center gap-2">
+          <span>Today's 15-Minute Quest</span>
+          <span class="text-xs font-normal text-slate-400">(Copy or print for physical delivery)</span>
+        </h2>
+        <div class="flex items-center gap-2">
+          <button id="btn-copy-quest" class="bg-brandSurface hover:bg-brandSurfaceHover text-white px-3 py-1.5 rounded-lg text-xs font-medium border border-brandBorder flex items-center gap-1.5 transition-colors">
+            <svg class="w-3.5 fill-none stroke-current stroke-2" viewBox="0 0 24 24"><path d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H14m0 0l3-3m-3 3l3 3"/></svg>
+            Copy Text
+          </button>
+          <button onclick="window.print()" class="bg-brandSurface hover:bg-brandSurfaceHover text-white px-3 py-1.5 rounded-lg text-xs font-medium border border-brandBorder flex items-center gap-1.5 transition-colors">
+            <svg class="w-3.5 fill-none stroke-current stroke-2" viewBox="0 0 24 24"><path d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4"/></svg>
+            Print
+          </button>
+        </div>
+      </div>
+
+      <!-- Main Quest Cards Stack -->
+      <div class="space-y-6">
+
+        <!-- Math & Quantitative Reasoning Box -->
+        <section class="print-card bg-brandSurface border border-brandBorder rounded-xl p-5 shadow-xl">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-brandBorder/50 pb-3 mb-4 gap-2">
+            <div>
+              <span class="text-xs font-bold uppercase tracking-wider text-brandAccent">Block 1: Quantitative Logic</span>
+              <h3 id="quest-math-title" class="text-lg font-bold text-white mt-0.5">Math & Quantitative Reasoning</h3>
+            </div>
+            <div class="flex items-center gap-2 self-start sm:self-auto">
+              <button onclick="window.addMoreQuestions('math')" class="no-print bg-slate-900 hover:bg-slate-800 text-brandAccent border border-brandAccent/30 px-2 py-0.5 rounded text-xs font-semibold flex items-center gap-1 transition-colors">
+                + 5 More
+              </button>
+              <span id="quest-math-badge" class="px-2 py-0.5 rounded text-xs font-semibold bg-brandAccent/10 text-brandAccent border border-brandAccent/20">Level 1</span>
+            </div>
+          </div>
+          
+          <div id="quest-math-container" class="space-y-6">
+            <!-- Rendered via JS -->
+          </div>
+        </section>
+
+        <!-- Reading & Verbal Logic Box -->
+        <section class="print-card bg-brandSurface border border-brandBorder rounded-xl p-5 shadow-xl">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-brandBorder/50 pb-3 mb-4 gap-2">
+            <div>
+              <span class="text-xs font-bold uppercase tracking-wider text-brandPrimary">Block 2: Verbal Analogy</span>
+              <h3 id="quest-reading-title" class="text-lg font-bold text-white mt-0.5">Reading & Verbal Logic</h3>
+            </div>
+            <div class="flex items-center gap-2 self-start sm:self-auto">
+              <button onclick="window.addMoreQuestions('reading')" class="no-print bg-slate-900 hover:bg-slate-800 text-brandPrimary border border-brandPrimary/30 px-2 py-0.5 rounded text-xs font-semibold flex items-center gap-1 transition-colors">
+                + 5 More
+              </button>
+              <button id="toggle-pinyin-btn" class="no-print bg-slate-900 hover:bg-slate-800 text-brandPrimary border border-brandPrimary/30 px-2 py-0.5 rounded text-xs font-semibold flex items-center gap-1 transition-colors">
+                中/拼 Chinese/Pinyin
+              </button>
+              <span id="quest-reading-badge" class="px-2 py-0.5 rounded text-xs font-semibold bg-brandPrimary/10 text-brandPrimary border border-brandPrimary/20">Level 1</span>
+            </div>
+          </div>
+          
+          <div id="quest-reading-container" class="space-y-6">
+            <!-- Rendered via JS -->
+          </div>
+        </section>
+
+        <!-- Social-Emotional Intelligence (SEL) script -->
+        <section class="print-card bg-brandSurface border border-brandBorder rounded-xl p-5 shadow-xl">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-brandBorder/50 pb-3 mb-4 gap-2">
+            <div>
+              <span class="text-xs font-bold uppercase tracking-wider text-brandSuccess">Block 3: Social-Emotional Intelligence</span>
+              <h3 id="quest-sel-title" class="text-lg font-bold text-white mt-0.5">SEL Challenge Script</h3>
+            </div>
+            <span id="quest-sel-badge" class="px-2 py-0.5 rounded text-xs font-semibold bg-brandSuccess/10 text-brandSuccess border border-brandSuccess/20 self-start sm:self-auto">Level 1</span>
+          </div>
+          
+          <div id="quest-sel-container" class="space-y-4 text-slate-200">
+            <!-- Rendered via JS -->
+          </div>
+        </section>
+      </div>
+
+      <!-- Inline Quick Log & Next Quest Form -->
+      <div class="no-print mt-8 bg-brandSurface border border-brandBorder p-5 sm:p-6 rounded-2xl shadow-xl space-y-4">
+        <div>
+          <h4 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+            <svg class="w-5 h-5 text-brandSuccess fill-none stroke-current stroke-2" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+            Quick Session Log & Next Quest
+          </h4>
+          <p class="text-xs text-slate-400 mt-0.5">Log performance for this sheet to calibrate levels and immediately load the next quest.</p>
+        </div>
+
+        <form id="inline-log-form" class="space-y-4">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <!-- Math Grade -->
+            <div class="bg-slate-900/60 p-4 rounded-xl border border-brandBorder/50">
+              <span class="block text-xs font-bold text-slate-300 mb-2.5">1. Math / Quantitative</span>
+              <div class="space-y-2 text-xs">
+                <label class="flex items-center gap-2 cursor-pointer select-none">
+                  <input type="radio" name="inline-math-score" value="mastered" required class="w-4 h-4 accent-brandSuccess">
+                  <span class="text-brandSuccess font-bold">Mastered (+1 Lvl)</span>
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer select-none">
+                  <input type="radio" name="inline-math-score" value="hint" class="w-4 h-4 accent-slate-400">
+                  <span class="text-slate-200 font-semibold">With Hint (Keep Lvl)</span>
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer select-none">
+                  <input type="radio" name="inline-math-score" value="struggled" class="w-4 h-4 accent-brandError">
+                  <span class="text-brandError font-bold">Struggled (-1 Lvl)</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Reading Grade -->
+            <div class="bg-slate-900/60 p-4 rounded-xl border border-brandBorder/50">
+              <span class="block text-xs font-bold text-slate-300 mb-2.5">2. Reading / Verbal</span>
+              <div class="space-y-2 text-xs">
+                <label class="flex items-center gap-2 cursor-pointer select-none">
+                  <input type="radio" name="inline-reading-score" value="mastered" required class="w-4 h-4 accent-brandSuccess">
+                  <span class="text-brandSuccess font-bold">Mastered (+1 Lvl)</span>
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer select-none">
+                  <input type="radio" name="inline-reading-score" value="hint" class="w-4 h-4 accent-slate-400">
+                  <span class="text-slate-200 font-semibold">With Hint (Keep Lvl)</span>
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer select-none">
+                  <input type="radio" name="inline-reading-score" value="struggled" class="w-4 h-4 accent-brandError">
+                  <span class="text-brandError font-bold">Struggled (-1 Lvl)</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- SEL Grade -->
+            <div class="bg-slate-900/60 p-4 rounded-xl border border-brandBorder/50">
+              <span class="block text-xs font-bold text-slate-300 mb-2.5">3. SEL Challenge</span>
+              <div class="space-y-2 text-xs">
+                <label class="flex items-center gap-2 cursor-pointer select-none">
+                  <input type="radio" name="inline-sel-score" value="mastered" required class="w-4 h-4 accent-brandSuccess">
+                  <span class="text-brandSuccess font-bold">Audible / Confident</span>
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer select-none">
+                  <input type="radio" name="inline-sel-score" value="hint" class="w-4 h-4 accent-slate-400">
+                  <span class="text-slate-200 font-semibold">Hesitant (Keep Lvl)</span>
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer select-none">
+                  <input type="radio" name="inline-sel-score" value="struggled" class="w-4 h-4 accent-brandError">
+                  <span class="text-brandError font-bold">Refused / Too Shy</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <textarea id="inline-log-comment" rows="2" placeholder="Add parent observations or notes here..." class="w-full bg-slate-900 border border-brandBorder rounded-xl p-3 text-xs sm:text-sm text-slate-200 focus:outline-none placeholder-slate-500"></textarea>
+          </div>
+
+          <button type="submit" class="w-full py-3.5 bg-brandSuccess hover:bg-emerald-600 text-white font-extrabold rounded-xl shadow-lg text-xs sm:text-sm tracking-wide uppercase transition-colors">
+            Submit Log & Load Next Quest
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Tab 2: The 30-Second Parent Log Form -->
+    <div id="tab-log" class="tab-content">
+      <div class="bg-brandSurface border border-brandBorder rounded-2xl p-6 sm:p-8 shadow-xl max-w-2xl mx-auto">
+        <h2 class="text-2xl font-bold text-white mb-1.5">The 30-Second Parent Log</h2>
+        <p class="text-sm text-slate-400 mb-6">Grade Ada's performance for today's quest to calibrate future questions.</p>
+
+        <form id="log-form" class="space-y-6">
+          
+          <!-- Math Grade -->
+          <div class="bg-slate-900/60 p-5 rounded-xl border border-brandBorder/40">
+            <label class="block text-base font-bold text-slate-200 mb-3">1. Math/Quantitative Performance</label>
+            <div class="grid grid-cols-1 gap-3">
+              <label class="relative flex items-center p-4 rounded-xl border border-brandBorder bg-brandSurface hover:bg-brandSurfaceHover cursor-pointer select-none">
+                <input type="radio" name="math-score" value="mastered" required class="w-5 h-5 text-brandPrimary accent-indigo-500 mr-3.5">
+                <div class="text-sm">
+                  <span class="block font-bold text-brandSuccess">Mastered Instantly</span>
+                  <span class="block text-xs text-slate-400 mt-0.5">+1 Difficulty Tier</span>
+                </div>
+              </label>
+              <label class="relative flex items-center p-4 rounded-xl border border-brandBorder bg-brandSurface hover:bg-brandSurfaceHover cursor-pointer select-none">
+                <input type="radio" name="math-score" value="hint" class="w-5 h-5 text-brandPrimary accent-indigo-500 mr-3.5">
+                <div class="text-sm">
+                  <span class="block font-bold text-slate-200">Solved with Hint</span>
+                  <span class="block text-xs text-slate-400 mt-0.5">Maintain current tier</span>
+                </div>
+              </label>
+              <label class="relative flex items-center p-4 rounded-xl border border-brandBorder bg-brandSurface hover:bg-brandSurfaceHover cursor-pointer select-none">
+                <input type="radio" name="math-score" value="struggled" class="w-5 h-5 text-brandPrimary accent-indigo-500 mr-3.5">
+                <div class="text-sm">
+                  <span class="block font-bold text-brandError">Struggled/Confused</span>
+                  <span class="block text-xs text-slate-400 mt-0.5">-1 Difficulty Tier</span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- Reading Grade -->
+          <div class="bg-slate-900/60 p-5 rounded-xl border border-brandBorder/40">
+            <label class="block text-base font-bold text-slate-200 mb-3">2. Reading/Verbal Performance</label>
+            <div class="grid grid-cols-1 gap-3">
+              <label class="relative flex items-center p-4 rounded-xl border border-brandBorder bg-brandSurface hover:bg-brandSurfaceHover cursor-pointer select-none">
+                <input type="radio" name="reading-score" value="mastered" required class="w-5 h-5 text-brandPrimary accent-indigo-500 mr-3.5">
+                <div class="text-sm">
+                  <span class="block font-bold text-brandSuccess">Mastered Instantly</span>
+                  <span class="block text-xs text-slate-400 mt-0.5">+1 Difficulty Tier</span>
+                </div>
+              </label>
+              <label class="relative flex items-center p-4 rounded-xl border border-brandBorder bg-brandSurface hover:bg-brandSurfaceHover cursor-pointer select-none">
+                <input type="radio" name="reading-score" value="hint" class="w-5 h-5 text-brandPrimary accent-indigo-500 mr-3.5">
+                <div class="text-sm">
+                  <span class="block font-bold text-slate-200">Solved with Hint</span>
+                  <span class="block text-xs text-slate-400 mt-0.5">Maintain current tier</span>
+                </div>
+              </label>
+              <label class="relative flex items-center p-4 rounded-xl border border-brandBorder bg-brandSurface hover:bg-brandSurfaceHover cursor-pointer select-none">
+                <input type="radio" name="reading-score" value="struggled" class="w-5 h-5 text-brandPrimary accent-indigo-500 mr-3.5">
+                <div class="text-sm">
+                  <span class="block font-bold text-brandError">Struggled/Confused</span>
+                  <span class="block text-xs text-slate-400 mt-0.5">-1 Difficulty Tier</span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- SEL Grade -->
+          <div class="bg-slate-900/60 p-5 rounded-xl border border-brandBorder/40">
+            <label class="block text-base font-bold text-slate-200 mb-3">3. SEL Challenge Performance</label>
+            <div class="grid grid-cols-1 gap-3">
+              <label class="relative flex items-center p-4 rounded-xl border border-brandBorder bg-brandSurface hover:bg-brandSurfaceHover cursor-pointer select-none">
+                <input type="radio" name="sel-score" value="mastered" required class="w-5 h-5 text-brandPrimary accent-indigo-500 mr-3.5">
+                <div class="text-sm">
+                  <span class="block font-bold text-brandSuccess">Audible Confidence</span>
+                  <span class="block text-xs text-slate-400 mt-0.5">+1 Difficulty Tier</span>
+                </div>
+              </label>
+              <label class="relative flex items-center p-4 rounded-xl border border-brandBorder bg-brandSurface hover:bg-brandSurfaceHover cursor-pointer select-none">
+                <input type="radio" name="sel-score" value="hint" class="w-5 h-5 text-brandPrimary accent-indigo-500 mr-3.5">
+                <div class="text-sm">
+                  <span class="block font-bold text-slate-200">Shy or Hesitant</span>
+                  <span class="block text-xs text-slate-400 mt-0.5">Maintain current tier</span>
+                </div>
+              </label>
+              <label class="relative flex items-center p-4 rounded-xl border border-brandBorder bg-brandSurface hover:bg-brandSurfaceHover cursor-pointer select-none">
+                <input type="radio" name="sel-score" value="struggled" class="w-5 h-5 text-brandPrimary accent-indigo-500 mr-3.5">
+                <div class="text-sm">
+                  <span class="block font-bold text-brandError">Refused / Too Shy</span>
+                  <span class="block text-xs text-slate-400 mt-0.5">-1 Difficulty Tier</span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- Comments / Notes Area -->
+          <div>
+            <label for="log-comment" class="block text-base font-bold text-slate-200 mb-1.5">4. Parent Observations & Notes</label>
+            <textarea id="log-comment" rows="3" placeholder="Add notes about specific words struggled with, mistakes made on paper folding, or behavior comments..." class="w-full bg-slate-900 border border-brandBorder rounded-xl p-4 text-base text-slate-200 focus:outline-none placeholder-slate-500"></textarea>
+          </div>
+
+          <!-- Submit Button -->
+          <button type="submit" class="w-full py-4.5 bg-brandPrimary hover:bg-indigo-700 text-white font-extrabold rounded-xl shadow-lg text-base tracking-wide uppercase transition-colors">
+            Submit Log & Generate Tomorrow's Quest
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Tab 3: Progress & Cross-Device Sync -->
+    <div id="tab-progress" class="tab-content">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        
+        <!-- Left Side: Badges and Milestones (2 columns) -->
+        <div class="md:col-span-2 space-y-6">
+          
+          <!-- Level Milestones Card -->
+          <section class="bg-brandSurface border border-brandBorder rounded-xl p-5 shadow-xl">
+            <h2 class="text-lg font-bold text-white mb-1.5">Milestone Tracking</h2>
+            <p class="text-xs text-slate-400 mb-6">Compare Ada's current capabilities against High Capable (HiCap) standards.</p>
+            
+            <div class="space-y-6">
+              <!-- Math Progress -->
+              <div>
+                <div class="flex justify-between text-xs font-semibold mb-2">
+                  <span class="text-slate-300">Math & Quantitative Reasoning</span>
+                  <span id="progress-math-label" class="text-brandAccent">Level 1 / 5</span>
+                </div>
+                <div class="w-full bg-slate-900 h-3.5 rounded-full border border-brandBorder/60 p-0.5 overflow-hidden">
+                  <div id="progress-math-bar" class="bg-brandAccent h-full rounded-full transition-all duration-500" style="width: 20%"></div>
+                </div>
+                <p id="progress-math-desc" class="text-[11px] text-slate-400 mt-2 font-normal">Level 1: Foundation (Kindergarten / Early 1st Grade concepts)</p>
+              </div>
+
+              <!-- Reading Progress -->
+              <div>
+                <div class="flex justify-between text-xs font-semibold mb-2">
+                  <span class="text-slate-300">Reading & Verbal Logic</span>
+                  <span id="progress-reading-label" class="text-brandPrimary">Level 1 / 5</span>
+                </div>
+                <div class="w-full bg-slate-900 h-3.5 rounded-full border border-brandBorder/60 p-0.5 overflow-hidden">
+                  <div id="progress-reading-bar" class="bg-brandPrimary h-full rounded-full transition-all duration-500" style="width: 20%"></div>
+                </div>
+                <p id="progress-reading-desc" class="text-[11px] text-slate-400 mt-2 font-normal">Level 1: Foundation (Direct-recall stories)</p>
+              </div>
+
+              <!-- SEL Progress -->
+              <div>
+                <div class="flex justify-between text-xs font-semibold mb-2">
+                  <span class="text-slate-300">Social-Emotional Intelligence</span>
+                  <span id="progress-sel-label" class="text-brandSuccess">Level 1 / 5</span>
+                </div>
+                <div class="w-full bg-slate-900 h-3.5 rounded-full border border-brandBorder/60 p-0.5 overflow-hidden">
+                  <div id="progress-sel-bar" class="bg-brandSuccess h-full rounded-full transition-all duration-500" style="width: 20%"></div>
+                </div>
+                <p id="progress-sel-desc" class="text-[11px] text-slate-400 mt-2 font-normal">Level 1: Foundation (Post-story empathy checking)</p>
+              </div>
+            </div>
+
+            <!-- Milestone Threshold Explanation -->
+            <div class="mt-6 pt-5 border-t border-brandBorder/50 text-[11px] text-slate-400 leading-relaxed space-y-2">
+              <p><strong class="text-slate-200">HiCap Gifted Entry Standard:</strong> Level 5 is calibrated to represent the 95th+ percentile of cognitive development for a rising 1st grader. Consistently maintaining Level 4-5 in Math and Reading is the targeted goal for testing prep.</p>
+              <p><strong class="text-slate-200">Progress Logic:</strong> Difficulty scaling is student-paced. The state engine automatically increases a tier on "Mastered Instantly," maintains tier on "Solved with Hint," and decreases tier on "Struggled" to consolidate foundations.</p>
+            </div>
+          </section>
+
+          <!-- History Logs Feed -->
+          <section class="bg-brandSurface border border-brandBorder rounded-xl p-5 shadow-xl">
+            <h2 class="text-lg font-bold text-white mb-1">Session History</h2>
+            <p class="text-xs text-slate-400 mb-4">Past logs recorded locally on this device.</p>
+            
+            <div id="history-container" class="space-y-3 max-h-96 overflow-y-auto pr-1">
+              <!-- Rendered via JS -->
+              <p class="text-xs text-slate-500 italic py-4 text-center">No session logs recorded yet. Complete a session to see history.</p>
+            </div>
+          </section>
+
+        </div>
+
+        <!-- Right Side: Cross-Device Sync Utility -->
+        <div class="space-y-6">
+          <section class="bg-brandSurface border border-brandBorder rounded-xl p-5 shadow-xl">
+            <h2 class="text-base font-bold text-white mb-1">Data Management</h2>
+            <p class="text-xs text-slate-400 mb-4">Transfer logs and current levels between your phone and laptop for free.</p>
+            
+            <div class="space-y-4">
+              <!-- Export Card -->
+              <div>
+                <span class="block text-xs font-semibold text-slate-300 mb-1">Export Data</span>
+                <p class="text-[10px] text-slate-500 mb-2">Copy this token to import on your other device.</p>
+                <button id="btn-export" class="w-full bg-brandPrimary/10 text-brandPrimary hover:bg-brandPrimary/20 border border-brandPrimary/30 py-2 rounded-lg text-xs font-bold transition-colors">
+                  Generate Sync Token
+                </button>
+                <textarea id="export-textarea" readonly class="hidden w-full bg-slate-900 border border-brandBorder rounded-lg p-2 text-[10px] font-mono mt-2 text-slate-300 focus:outline-none h-20 select-all" placeholder="Sync token will appear here..."></textarea>
+                <button id="btn-copy-token" class="hidden w-full bg-slate-800 hover:bg-slate-700 text-white py-1.5 rounded-lg text-xs font-medium border border-brandBorder mt-1.5 transition-colors">
+                  Copy Token to Clipboard
+                </button>
+              </div>
+
+              <!-- Import Card -->
+              <div class="border-t border-brandBorder/50 pt-4">
+                <span class="block text-xs font-semibold text-slate-300 mb-1">Import Data</span>
+                <p class="text-[10px] text-slate-500 mb-2">Paste the token generated from another device below.</p>
+                <textarea id="import-textarea" class="w-full bg-slate-900 border border-brandBorder rounded-lg p-2 text-[10px] font-mono text-slate-300 focus:outline-none h-20" placeholder="Paste sync token here..."></textarea>
+                <button id="btn-import" class="w-full bg-brandSuccess/10 text-brandSuccess hover:bg-brandSuccess/20 border border-brandSuccess/30 py-2 rounded-lg text-xs font-bold mt-2 transition-colors">
+                  Load & Overwrite Local Data
+                </button>
+                <div id="import-feedback" class="text-[10px] mt-2 hidden"></div>
+              </div>
+
+              <!-- Reset Data Card -->
+              <div class="border-t border-brandBorder/50 pt-4">
+                <span class="block text-xs font-semibold text-brandError mb-1">Danger Zone</span>
+                <button id="btn-reset-data" class="w-full bg-brandError/10 text-brandError hover:bg-brandError/20 border border-brandError/30 py-2 rounded-lg text-xs font-bold transition-colors">
+                  Reset All Progress & Logs
+                </button>
+              </div>
+            </div>
+          </section>
+
+          <!-- Self Diagnostics -->
+          <section class="bg-brandSurface border border-brandBorder rounded-xl p-4 shadow-xl">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">System Diagnostics</h3>
+            <button id="btn-run-tests" class="text-[10px] text-brandPrimary hover:underline block">
+              Run System Integrity Self-Checks
+            </button>
+            <div id="diagnostics-feedback" class="text-[10px] text-slate-400 mt-1 italic"></div>
+          </section>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="no-print mt-auto text-center py-4 border-t border-brandBorder/40 max-w-4xl mx-auto w-full px-4 flex justify-between items-center text-xs text-slate-500">
+    <p>A Chang Learns SPA &bull; Zero Cloud Costs &bull; Local Storage Persistence</p>
+    <p>Google Antigravity &bull; 2026</p>
+  </footer>
+
+  <!-- Application JS Entry -->
+  <script type="module" src="./src/main.js"></script>
+
+  <!-- Global Switch Tab Helper (needs to be available globally) -->
+  <script>
+    function switchTab(tabName) {
+      // Hide all tabs
+      document.querySelectorAll('.tab-content').forEach(el => {
+        el.classList.remove('active');
+      });
+      
+      // Remove active states from nav buttons
+      const buttons = [
+        { id: 'tab-quest-btn', active: 'bg-brandPrimary text-white shadow-lg', inactive: 'text-slate-400 hover:text-white hover:bg-slate-800' },
+        { id: 'tab-log-btn', active: 'bg-brandPrimary text-white shadow-lg', inactive: 'text-slate-400 hover:text-white hover:bg-slate-800' },
+        { id: 'tab-progress-btn', active: 'bg-brandPrimary text-white shadow-lg', inactive: 'text-slate-400 hover:text-white hover:bg-slate-800' }
+      ];
+
+      buttons.forEach(btnInfo => {
+        const el = document.getElementById(btnInfo.id);
+        if (!el) return;
+        
+        // Split active/inactive classes
+        const activeClasses = btnInfo.active.split(' ');
+        const inactiveClasses = btnInfo.inactive.split(' ');
+
+        if (btnInfo.id === `tab-${tabName}-btn`) {
+          el.classList.remove(...inactiveClasses);
+          el.classList.add(...activeClasses);
+        } else {
+          el.classList.remove(...activeClasses);
+          el.classList.add(...inactiveClasses);
+        }
+      });
+
+      // Show target tab
+      const targetTab = document.getElementById(`tab-${tabName}`);
+      if (targetTab) {
+        targetTab.classList.add('active');
+      }
+      
+      // Dispatch tab changed event so main.js can update rendering if necessary
+      window.dispatchEvent(new CustomEvent('tabChanged', { detail: { tab: tabName } }));
+    }
+
+    function toggleLegend() {
+      const content = document.getElementById('legend-content');
+      const chevron = document.getElementById('legend-chevron');
+      if (!content || !chevron) return;
+      
+      const isHidden = content.classList.contains('hidden');
+      if (isHidden) {
+        content.classList.remove('hidden');
+        chevron.classList.add('rotate-180');
+      } else {
+        content.classList.add('hidden');
+        chevron.classList.remove('rotate-180');
+      }
+    }
+  </script>
+</body>
+</html>
