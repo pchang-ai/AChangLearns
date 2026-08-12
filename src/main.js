@@ -405,15 +405,23 @@ function renderQuest() {
       html += `</div>`;
     }
     
-    // Parent answer key
-    html += `<p class="text-xs sm:text-sm text-slate-500 mt-2.5"><strong class="text-brandAccent">Parent Answer Key:</strong> ${escapeHtml(q.answer)}</p>`;
-    
-    // Parent Prompt & Elimination Tip Card
+    // Reveal Parent controls (Hidden by default)
     html += `
-      <div class="mt-3 bg-brandSurface border-2 border-dashed border-brandBorder/80 rounded-xl p-3.5 space-y-2 text-xs sm:text-sm">
-        <p class="leading-relaxed text-slate-700"><strong class="text-brandAccent uppercase text-[10px] tracking-wider block mb-0.5">Parent Prompt / Script:</strong> "${escapeHtml(q.parentPrompt)}"</p>
-        <p class="leading-relaxed text-slate-700"><strong class="text-brandAccent uppercase text-[10px] tracking-wider block mb-0.5">Elimination Method:</strong> "${escapeHtml(q.elimination)}"</p>
-      </div>
+      <details class="no-print mt-3 group border-2 border-brandBorder/60 rounded-xl p-3 bg-slate-50 shadow-sm">
+        <summary class="flex items-center gap-1.5 text-xs font-bold text-slate-700 hover:text-slate-900 cursor-pointer select-none outline-none list-none [&::-webkit-details-marker]:hidden">
+          <svg class="w-3.5 h-3.5 transform transition-transform duration-200 group-open:rotate-90 text-brandAccent" fill="none" stroke="currentColor" stroke-width="3.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+          </svg>
+          <span class="uppercase tracking-wider">Reveal Answer Key & Parent Script</span>
+        </summary>
+        <div class="mt-2.5 pt-2.5 border-t border-brandBorder/20 space-y-2">
+          <p class="text-xs sm:text-sm text-slate-800"><strong class="text-brandAccent">Parent Answer Key:</strong> ${escapeHtml(q.answer)}</p>
+          <div class="bg-brandSurface border-2 border-dashed border-brandBorder/80 rounded-xl p-3.5 space-y-2 text-xs sm:text-sm shadow-sm">
+            <p class="leading-relaxed text-slate-700"><strong class="text-brandAccent uppercase text-[10px] tracking-wider block mb-0.5">Parent Prompt / Script:</strong> "${escapeHtml(q.parentPrompt)}"</p>
+            <p class="leading-relaxed text-slate-700"><strong class="text-brandAccent uppercase text-[10px] tracking-wider block mb-0.5">Elimination Method:</strong> "${escapeHtml(q.elimination)}"</p>
+          </div>
+        </div>
+      </details>
     `;
     
     div.innerHTML = html;
@@ -496,15 +504,23 @@ function renderQuest() {
       html += `</div>`;
     }
 
-    // Parent answer key
-    html += `<p class="text-xs sm:text-sm text-slate-500 mt-2.5"><strong class="text-brandPrimary">Parent Answer Key:</strong> ${escapeHtml(q.answer)}</p>`;
-    
-    // Parent Prompt & Elimination Tip Card
+    // Reveal Parent controls (Hidden by default)
     html += `
-      <div class="mt-3 bg-brandSurface border-2 border-dashed border-brandBorder/80 rounded-xl p-3.5 space-y-2 text-xs sm:text-sm">
-        <p class="leading-relaxed text-slate-700"><strong class="text-brandPrimary uppercase text-[10px] tracking-wider block mb-0.5">Parent Prompt / Script:</strong> "${escapeHtml(q.parentPrompt)}"</p>
-        <p class="leading-relaxed text-slate-700"><strong class="text-brandPrimary uppercase text-[10px] tracking-wider block mb-0.5">Elimination Method:</strong> "${escapeHtml(q.elimination)}"</p>
-      </div>
+      <details class="no-print mt-3 group border-2 border-brandBorder/60 rounded-xl p-3 bg-slate-50 shadow-sm">
+        <summary class="flex items-center gap-1.5 text-xs font-bold text-slate-700 hover:text-slate-900 cursor-pointer select-none outline-none list-none [&::-webkit-details-marker]:hidden">
+          <svg class="w-3.5 h-3.5 transform transition-transform duration-200 group-open:rotate-90 text-brandPrimary" fill="none" stroke="currentColor" stroke-width="3.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+          </svg>
+          <span class="uppercase tracking-wider">Reveal Answer Key & Parent Script</span>
+        </summary>
+        <div class="mt-2.5 pt-2.5 border-t border-brandBorder/20 space-y-2">
+          <p class="text-xs sm:text-sm text-slate-800"><strong class="text-brandPrimary">Parent Answer Key:</strong> ${escapeHtml(q.answer)}</p>
+          <div class="bg-brandSurface border-2 border-dashed border-brandBorder/80 rounded-xl p-3.5 space-y-2 text-xs sm:text-sm shadow-sm">
+            <p class="leading-relaxed text-slate-700"><strong class="text-brandPrimary uppercase text-[10px] tracking-wider block mb-0.5">Parent Prompt / Script:</strong> "${escapeHtml(q.parentPrompt)}"</p>
+            <p class="leading-relaxed text-slate-700"><strong class="text-brandPrimary uppercase text-[10px] tracking-wider block mb-0.5">Elimination Method:</strong> "${escapeHtml(q.elimination)}"</p>
+          </div>
+        </div>
+      </details>
     `;
     
     div.innerHTML = html;
@@ -534,30 +550,44 @@ function renderQuest() {
       `;
     }
 
+    // Reveal Parent Guide and roleplay scripts (Hidden by default)
     html += `
-      <div class="bg-brandSurface border-2 border-brandBorder p-4 rounded-xl text-sm sm:text-base leading-relaxed text-slate-700 shadow-[2px_2px_0_0_#2d3748]">
-        <strong class="text-brandSuccess uppercase text-xs tracking-wider block mb-1">Parent Guide:</strong>
-        ${escapeHtml(qSel.prompt)}
-      </div>
+      <details class="no-print mt-3 group border-2 border-brandBorder/60 rounded-xl p-3 bg-slate-50 shadow-sm">
+        <summary class="flex items-center gap-1.5 text-xs font-bold text-slate-700 hover:text-slate-900 cursor-pointer select-none outline-none list-none [&::-webkit-details-marker]:hidden">
+          <svg class="w-3.5 h-3.5 transform transition-transform duration-200 group-open:rotate-90 text-brandSuccess" fill="none" stroke="currentColor" stroke-width="3.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+          </svg>
+          <span class="uppercase tracking-wider">Reveal Parent Guide & Script</span>
+        </summary>
+        <div class="mt-2.5 pt-2.5 border-t border-brandBorder/20 space-y-3">
+          <div class="bg-brandSurface border-2 border-brandBorder p-4 rounded-xl text-sm sm:text-base leading-relaxed text-slate-700 shadow-[2px_2px_0_0_#2d3748]">
+            <strong class="text-brandSuccess uppercase text-xs tracking-wider block mb-1">Parent Guide:</strong>
+            ${escapeHtml(qSel.prompt)}
+          </div>
     `;
 
     // Render Mandarin roleplay scripts if available (Level 3 challenges)
     if (qSel.script) {
       html += `
-        <div class="p-4 bg-brandSurface border-2 border-brandBorder rounded-xl shadow-[2px_2px_0_0_#2d3748]">
-          <span class="text-xs font-bold uppercase bg-slate-800 text-slate-100 px-2.5 py-1 rounded border border-brandBorder block w-max mb-3">Public Execution Script</span>
-          <div class="space-y-2">
-            <p class="text-sm sm:text-base font-semibold text-slate-800">English: <span class="font-medium text-slate-700">"${escapeHtml(qSel.script.english)}"</span></p>
-            ${showMandarin ? `
-              <p class="text-sm sm:text-base font-bold text-brandAccent">Mandarin: <span class="font-bold text-base sm:text-lg">"${escapeHtml(qSel.script.chinese)}"</span></p>
-              <p class="text-sm sm:text-base text-brandPrimary font-semibold">Pinyin: <span class="font-normal italic">"${escapeHtml(qSel.script.pinyin)}"</span></p>
-            ` : `
-              <p class="text-xs sm:text-sm text-slate-500 italic font-normal">Pinyin/Chinese script translation toggled off. Press the "Chinese/Pinyin" button in Block 2 to reveal.</p>
-            `}
+          <div class="p-4 bg-brandSurface border-2 border-brandBorder rounded-xl shadow-[2px_2px_0_0_#2d3748]">
+            <span class="text-xs font-bold uppercase bg-slate-800 text-slate-100 px-2.5 py-1 rounded border border-brandBorder block w-max mb-3">Public Execution Script</span>
+            <div class="space-y-2">
+              <p class="text-sm sm:text-base font-semibold text-slate-800">English: <span class="font-medium text-slate-700">"${escapeHtml(qSel.script.english)}"</span></p>
+              ${showMandarin ? `
+                <p class="text-sm sm:text-base font-bold text-brandAccent">Mandarin: <span class="font-bold text-base sm:text-lg">"${escapeHtml(qSel.script.chinese)}"</span></p>
+                <p class="text-sm sm:text-base text-brandPrimary font-semibold">Pinyin: <span class="font-normal italic">"${escapeHtml(qSel.script.pinyin)}"</span></p>
+              ` : `
+                <p class="text-xs sm:text-sm text-slate-500 italic font-normal">Pinyin/Chinese script translation toggled off. Press the "Chinese/Pinyin" button in Block 2 to reveal.</p>
+              `}
+            </div>
           </div>
-        </div>
       `;
     }
+
+    html += `
+        </div>
+      </details>
+    `;
 
     div.innerHTML = html;
     selContainer.appendChild(div);

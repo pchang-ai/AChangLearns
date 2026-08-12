@@ -182,3 +182,11 @@ button:focus, input:focus, select:focus, textarea:focus {
     border: 1px solid #cbd5e1 !important;
   }
 }
+
+/* Hide default disclosure triangles for standard summaries */
+details summary::-webkit-details-marker {
+  display: none;
+}
+details summary {
+  list-style: none;
+}
