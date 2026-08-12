@@ -13,14 +13,27 @@
       theme: {
         extend: {
           colors: {
-            brandBg: '#0b0f19',
-            brandSurface: '#151c2c',
-            brandSurfaceHover: '#1e293b',
-            brandBorder: '#334155',
-            brandPrimary: '#6366f1',
-            brandAccent: '#f59e0b',
-            brandSuccess: '#10b981',
-            brandError: '#ef4444',
+            brandBg: '#faf8f2',          /* Warm cream paper background */
+            brandSurface: '#ffffff',     /* White paper sheet */
+            brandSurfaceHover: '#f8fafc',
+            brandBorder: '#2d3748',      /* Pencil charcoal */
+            brandPrimary: '#2563eb',     /* Crayon blue */
+            brandAccent: '#ea580c',      /* Crayon orange */
+            brandSuccess: '#16a34a',     /* Chalkboard green */
+            brandError: '#dc2626',       /* Correction red */
+            slate: {
+              50: '#0f172a',
+              100: '#1e293b',
+              200: '#334155',
+              300: '#475569',
+              400: '#64748b',
+              500: '#94a3b8',
+              600: '#cbd5e1',
+              700: '#e2e8f0',
+              800: '#f1f5f9',
+              900: '#f8fafc',
+              950: '#ffffff',
+            }
           }
         }
       }
@@ -30,13 +43,13 @@
   <!-- Custom CSS file -->
   <link rel="stylesheet" href="./src/style.css">
 </head>
-<body class="bg-brandBg text-slate-100 flex flex-col min-full pb-12">
+<body class="bg-brandBg text-slate-100 flex flex-col min-h-screen pb-12">
 
   <!-- Header Banner -->
-  <header class="no-print border-b border-brandBorder bg-brandSurface/80 backdrop-blur-md sticky top-0 z-50">
+  <header class="no-print border-b-4 border-brandBorder bg-brandSurface sticky top-0 z-50">
     <div class="max-w-4xl mx-auto px-4 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
       <div>
-        <h1 class="text-2xl font-extrabold tracking-tight text-white flex items-center gap-2">
+        <h1 class="text-2xl font-extrabold tracking-tight text-slate-900 flex items-center gap-2">
           <span>A CHANG LEARNS</span>
           <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-brandPrimary/20 text-brandPrimary border border-brandPrimary/30">Parent Dashboard</span>
         </h1>
@@ -45,28 +58,28 @@
 
       <!-- Live Level Badges with Manual Controls -->
       <div class="flex items-center gap-2">
-        <div class="bg-slate-900 border border-brandBorder px-2.5 py-1 rounded-lg text-center flex flex-col items-center">
+        <div class="bg-brandSurface border-2 border-brandBorder px-2.5 py-1 rounded-xl text-center flex flex-col items-center shadow-[2px_2px_0_0_#2d3748]">
           <span class="block text-[8px] uppercase font-bold text-slate-400 tracking-wider">Math</span>
           <div class="flex items-center gap-1.5 mt-0.5">
-            <button onclick="window.adjustLevel('math', -1)" class="w-5 h-5 flex items-center justify-center rounded bg-slate-800 hover:bg-slate-700 text-xs font-extrabold text-slate-300 transition-colors select-none">-</button>
+            <button onclick="window.adjustLevel('math', -1)" class="w-5 h-5 flex items-center justify-center rounded border border-brandBorder bg-slate-900 hover:bg-slate-800 text-xs font-extrabold text-slate-100 transition-colors select-none">-</button>
             <span id="header-math-level" class="text-sm font-black text-brandAccent">1</span>
-            <button onclick="window.adjustLevel('math', 1)" class="w-5 h-5 flex items-center justify-center rounded bg-slate-800 hover:bg-slate-700 text-xs font-extrabold text-slate-300 transition-colors select-none">+</button>
+            <button onclick="window.adjustLevel('math', 1)" class="w-5 h-5 flex items-center justify-center rounded border border-brandBorder bg-slate-900 hover:bg-slate-800 text-xs font-extrabold text-slate-100 transition-colors select-none">+</button>
           </div>
         </div>
-        <div class="bg-slate-900 border border-brandBorder px-2.5 py-1 rounded-lg text-center flex flex-col items-center">
+        <div class="bg-brandSurface border-2 border-brandBorder px-2.5 py-1 rounded-xl text-center flex flex-col items-center shadow-[2px_2px_0_0_#2d3748]">
           <span class="block text-[8px] uppercase font-bold text-slate-400 tracking-wider">Verbal</span>
           <div class="flex items-center gap-1.5 mt-0.5">
-            <button onclick="window.adjustLevel('reading', -1)" class="w-5 h-5 flex items-center justify-center rounded bg-slate-800 hover:bg-slate-700 text-xs font-extrabold text-slate-300 transition-colors select-none">-</button>
+            <button onclick="window.adjustLevel('reading', -1)" class="w-5 h-5 flex items-center justify-center rounded border border-brandBorder bg-slate-900 hover:bg-slate-800 text-xs font-extrabold text-slate-100 transition-colors select-none">-</button>
             <span id="header-reading-level" class="text-sm font-black text-brandPrimary">1</span>
-            <button onclick="window.adjustLevel('reading', 1)" class="w-5 h-5 flex items-center justify-center rounded bg-slate-800 hover:bg-slate-700 text-xs font-extrabold text-slate-300 transition-colors select-none">+</button>
+            <button onclick="window.adjustLevel('reading', 1)" class="w-5 h-5 flex items-center justify-center rounded border border-brandBorder bg-slate-900 hover:bg-slate-800 text-xs font-extrabold text-slate-100 transition-colors select-none">+</button>
           </div>
         </div>
-        <div class="bg-slate-900 border border-brandBorder px-2.5 py-1 rounded-lg text-center flex flex-col items-center">
+        <div class="bg-brandSurface border-2 border-brandBorder px-2.5 py-1 rounded-xl text-center flex flex-col items-center shadow-[2px_2px_0_0_#2d3748]">
           <span class="block text-[8px] uppercase font-bold text-slate-400 tracking-wider">SEL</span>
           <div class="flex items-center gap-1.5 mt-0.5">
-            <button onclick="window.adjustLevel('sel', -1)" class="w-5 h-5 flex items-center justify-center rounded bg-slate-800 hover:bg-slate-700 text-xs font-extrabold text-slate-300 transition-colors select-none">-</button>
+            <button onclick="window.adjustLevel('sel', -1)" class="w-5 h-5 flex items-center justify-center rounded border border-brandBorder bg-slate-900 hover:bg-slate-800 text-xs font-extrabold text-slate-100 transition-colors select-none">-</button>
             <span id="header-sel-level" class="text-sm font-black text-brandSuccess">1</span>
-            <button onclick="window.adjustLevel('sel', 1)" class="w-5 h-5 flex items-center justify-center rounded bg-slate-800 hover:bg-slate-700 text-xs font-extrabold text-slate-300 transition-colors select-none">+</button>
+            <button onclick="window.adjustLevel('sel', 1)" class="w-5 h-5 flex items-center justify-center rounded border border-brandBorder bg-slate-900 hover:bg-slate-800 text-xs font-extrabold text-slate-100 transition-colors select-none">+</button>
           </div>
         </div>
       </div>
@@ -83,8 +96,8 @@
     </div>
 
     <!-- Curriculum Levels Legend (Collapsible) -->
-    <section class="no-print mb-6 bg-brandSurface border border-brandBorder rounded-2xl shadow-xl overflow-hidden transition-all duration-300">
-      <button onclick="toggleLegend()" class="w-full px-5 py-4 flex items-center justify-between text-left font-bold text-white hover:bg-brandSurfaceHover transition-colors focus:outline-none select-none">
+    <section class="no-print mb-6 bg-brandSurface border-2 border-brandBorder rounded-2xl shadow-[4px_4px_0_0_#2d3748] overflow-hidden transition-all duration-300">
+      <button onclick="toggleLegend()" class="w-full px-5 py-4 flex items-center justify-between text-left font-bold text-slate-900 hover:bg-brandSurfaceHover transition-colors focus:outline-none select-none">
         <div class="flex items-center gap-3">
           <span class="w-2.5 h-2.5 rounded-full bg-brandAccent animate-pulse"></span>
           <span class="text-sm sm:text-base tracking-wide font-extrabold uppercase">Curriculum Levels & Testing Legend (K - 5th Grade)</span>
@@ -92,7 +105,7 @@
         <svg id="legend-chevron" class="w-5 h-5 text-slate-400 transform transition-transform duration-300" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
       </button>
       
-      <div id="legend-content" class="hidden border-t border-brandBorder/40 bg-slate-900/40 p-5 space-y-6">
+      <div id="legend-content" class="hidden border-t-2 border-brandBorder bg-slate-900/40 p-5 space-y-6">
         <!-- Legend Explanation Intro -->
         <p class="text-xs text-slate-400 leading-relaxed font-normal">
           Highly Capable (HiCap) testing (e.g. <strong>Naglieri General Abilities Test</strong> & <strong>Iowa Assessments</strong>) typically evaluates students at one or more grade levels above their current placement. This curriculum scales from early foundations up to 5th-grade elite levels to systematically build cognitive stamina, spatial reasoning, and social-emotional growth as Ada grows.
@@ -101,7 +114,7 @@
         <!-- Grid of levels -->
         <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
           <!-- Level 1 -->
-          <div class="p-3.5 bg-slate-950/60 border border-brandBorder/30 rounded-xl space-y-2 text-xs">
+          <div class="p-3.5 bg-brandSurface border-2 border-brandBorder rounded-xl space-y-2 text-xs shadow-[2px_2px_0_0_#2d3748]">
             <span class="block font-black text-brandAccent uppercase tracking-wide">Level 1: Early Prep (K - 1st)</span>
             <div class="space-y-1.5 text-slate-300 font-normal leading-relaxed">
               <p><strong>Math:</strong> Sequencing, crosses 100 boundary, skip count by 5s/10s.</p>
@@ -110,7 +123,7 @@
             </div>
           </div>
           <!-- Level 2 -->
-          <div class="p-3.5 bg-slate-950/60 border border-brandBorder/30 rounded-xl space-y-2 text-xs">
+          <div class="p-3.5 bg-brandSurface border-2 border-brandBorder rounded-xl space-y-2 text-xs shadow-[2px_2px_0_0_#2d3748]">
             <span class="block font-black text-brandPrimary uppercase tracking-wide">Level 2: Explorer (1st - 2nd)</span>
             <div class="space-y-1.5 text-slate-300 font-normal leading-relaxed">
               <p><strong>Math:</strong> Single-digit equations, simple 2x2 shape matrices, side patterns.</p>
@@ -119,7 +132,7 @@
             </div>
           </div>
           <!-- Level 3 -->
-          <div class="p-3.5 bg-slate-950/60 border border-brandBorder/30 rounded-xl space-y-2 text-xs">
+          <div class="p-3.5 bg-brandSurface border-2 border-brandBorder rounded-xl space-y-2 text-xs shadow-[2px_2px_0_0_#2d3748]">
             <span class="block font-black text-brandSuccess uppercase tracking-wide">Level 3: Analyst (2nd - 3rd)</span>
             <div class="space-y-1.5 text-slate-300 font-normal leading-relaxed">
               <p><strong>Math:</strong> Double-digit regrouping, logic balance scales, shape flipping.</p>
@@ -128,7 +141,7 @@
             </div>
           </div>
           <!-- Level 4 -->
-          <div class="p-3.5 bg-slate-950/60 border border-brandBorder/30 rounded-xl space-y-2 text-xs">
+          <div class="p-3.5 bg-brandSurface border-2 border-brandBorder rounded-xl space-y-2 text-xs shadow-[2px_2px_0_0_#2d3748]">
             <span class="block font-black text-amber-500 uppercase tracking-wide">Level 4: Scholar (3rd - 4th)</span>
             <div class="space-y-1.5 text-slate-300 font-normal leading-relaxed">
               <p><strong>Math:</strong> 3D block counts, multiplication logic rules, gap pattern series.</p>
@@ -137,7 +150,7 @@
             </div>
           </div>
           <!-- Level 5 -->
-          <div class="p-3.5 bg-slate-950/60 border border-brandBorder/30 rounded-xl space-y-2 text-xs">
+          <div class="p-3.5 bg-brandSurface border-2 border-brandBorder rounded-xl space-y-2 text-xs shadow-[2px_2px_0_0_#2d3748]">
             <span class="block font-black text-emerald-400 uppercase tracking-wide">Level 5: Gifted Elite (4th - 5th)</span>
             <div class="space-y-1.5 text-slate-300 font-normal leading-relaxed">
               <p><strong>Math:</strong> Paper-folding geometry, multi-attribute matrices, scale systems.</p>
@@ -150,16 +163,16 @@
     </section>
 
     <!-- Navigation Tabs (Touch Friendly) -->
-    <nav class="no-print flex border-b border-brandBorder mb-6 bg-brandSurface/40 p-2 rounded-2xl gap-2" aria-label="Dashboard Navigation">
-      <button id="tab-quest-btn" class="flex-1 py-4 px-2 sm:px-4 rounded-xl text-center text-base sm:text-lg font-bold tracking-wide flex items-center justify-center gap-2 transition-all bg-brandPrimary text-white shadow-lg" onclick="switchTab('quest')">
+    <nav class="no-print flex border-2 border-brandBorder mb-6 bg-slate-900 p-2 rounded-2xl gap-2" aria-label="Dashboard Navigation">
+      <button id="tab-quest-btn" class="flex-1 py-3 px-2 sm:px-4 rounded-xl text-center text-base sm:text-lg font-bold tracking-wide flex items-center justify-center gap-2 transition-all bg-brandPrimary text-white border-2 border-brandBorder shadow-[3px_3px_0_0_#2d3748]" onclick="switchTab('quest')">
         <svg class="w-5 fill-none stroke-current stroke-2" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
         Today's Quest
       </button>
-      <button id="tab-log-btn" class="flex-1 py-4 px-2 sm:px-4 rounded-xl text-center text-base sm:text-lg font-bold tracking-wide text-slate-400 hover:text-white flex items-center justify-center gap-2 transition-all hover:bg-slate-800" onclick="switchTab('log')">
+      <button id="tab-log-btn" class="flex-1 py-3 px-2 sm:px-4 rounded-xl text-center text-base sm:text-lg font-bold tracking-wide text-slate-400 hover:text-brandPrimary hover:bg-brandSurfaceHover flex items-center justify-center gap-2 transition-all border-2 border-transparent hover:border-brandBorder hover:shadow-[3px_3px_0_0_#2d3748]" onclick="switchTab('log')">
         <svg class="w-5 fill-none stroke-current stroke-2" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
         30s Log
       </button>
-      <button id="tab-progress-btn" class="flex-1 py-4 px-2 sm:px-4 rounded-xl text-center text-base sm:text-lg font-bold tracking-wide text-slate-400 hover:text-white flex items-center justify-center gap-2 transition-all hover:bg-slate-800" onclick="switchTab('progress')">
+      <button id="tab-progress-btn" class="flex-1 py-3 px-2 sm:px-4 rounded-xl text-center text-base sm:text-lg font-bold tracking-wide text-slate-400 hover:text-brandPrimary hover:bg-brandSurfaceHover flex items-center justify-center gap-2 transition-all border-2 border-transparent hover:border-brandBorder hover:shadow-[3px_3px_0_0_#2d3748]" onclick="switchTab('progress')">
         <svg class="w-5 fill-none stroke-current stroke-2" viewBox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 002 2h2a2 2 0 002-2"/></svg>
         Progress
       </button>
@@ -168,16 +181,16 @@
     <!-- Tab 1: Today's Session Sheet -->
     <div id="tab-quest" class="tab-content active">
       <div class="no-print flex items-center justify-between mb-4">
-        <h2 class="text-xl font-bold text-white flex items-center gap-2">
+        <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
           <span>Today's 15-Minute Quest</span>
           <span class="text-xs font-normal text-slate-400">(Copy or print for physical delivery)</span>
         </h2>
         <div class="flex items-center gap-2">
-          <button id="btn-copy-quest" class="bg-brandSurface hover:bg-brandSurfaceHover text-white px-3 py-1.5 rounded-lg text-xs font-medium border border-brandBorder flex items-center gap-1.5 transition-colors">
+          <button id="btn-copy-quest" class="bg-brandSurface hover:bg-brandSurfaceHover text-slate-700 hover:text-slate-900 px-3 py-1.5 rounded-lg text-xs font-medium border-2 border-brandBorder flex items-center gap-1.5 transition-colors shadow-[2px_2px_0_0_#2d3748]">
             <svg class="w-3.5 fill-none stroke-current stroke-2" viewBox="0 0 24 24"><path d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H14m0 0l3-3m-3 3l3 3"/></svg>
             Copy Text
           </button>
-          <button onclick="window.print()" class="bg-brandSurface hover:bg-brandSurfaceHover text-white px-3 py-1.5 rounded-lg text-xs font-medium border border-brandBorder flex items-center gap-1.5 transition-colors">
+          <button onclick="window.print()" class="bg-brandSurface hover:bg-brandSurfaceHover text-slate-700 hover:text-slate-900 px-3 py-1.5 rounded-lg text-xs font-medium border-2 border-brandBorder flex items-center gap-1.5 transition-colors shadow-[2px_2px_0_0_#2d3748]">
             <svg class="w-3.5 fill-none stroke-current stroke-2" viewBox="0 0 24 24"><path d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4"/></svg>
             Print
           </button>
@@ -188,7 +201,7 @@
       <div class="space-y-6">
 
         <!-- Math & Quantitative Reasoning Box -->
-        <section class="print-card bg-brandSurface border border-brandBorder rounded-xl p-5 shadow-xl">
+        <section class="print-card notebook-paper">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-brandBorder/50 pb-3 mb-4 gap-2">
             <div>
               <span class="text-xs font-bold uppercase tracking-wider text-brandAccent">Block 1: Quantitative Logic</span>
@@ -208,7 +221,7 @@
         </section>
 
         <!-- Reading & Verbal Logic Box -->
-        <section class="print-card bg-brandSurface border border-brandBorder rounded-xl p-5 shadow-xl">
+        <section class="print-card notebook-paper">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-brandBorder/50 pb-3 mb-4 gap-2">
             <div>
               <span class="text-xs font-bold uppercase tracking-wider text-brandPrimary">Block 2: Verbal Analogy</span>
@@ -231,7 +244,7 @@
         </section>
 
         <!-- Social-Emotional Intelligence (SEL) script -->
-        <section class="print-card bg-brandSurface border border-brandBorder rounded-xl p-5 shadow-xl">
+        <section class="print-card notebook-paper">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-brandBorder/50 pb-3 mb-4 gap-2">
             <div>
               <span class="text-xs font-bold uppercase tracking-wider text-brandSuccess">Block 3: Social-Emotional Intelligence</span>
@@ -247,9 +260,9 @@
       </div>
 
       <!-- Inline Quick Log & Next Quest Form -->
-      <div class="no-print mt-8 bg-brandSurface border border-brandBorder p-5 sm:p-6 rounded-2xl shadow-xl space-y-4">
+      <div class="no-print mt-8 sticky-note p-5 sm:p-6 space-y-4">
         <div>
-          <h4 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+          <h4 class="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2 font-black">
             <svg class="w-5 h-5 text-brandSuccess fill-none stroke-current stroke-2" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
             Quick Session Log & Next Quest
           </h4>
@@ -329,8 +342,8 @@
 
     <!-- Tab 2: The 30-Second Parent Log Form -->
     <div id="tab-log" class="tab-content">
-      <div class="bg-brandSurface border border-brandBorder rounded-2xl p-6 sm:p-8 shadow-xl max-w-2xl mx-auto">
-        <h2 class="text-2xl font-bold text-white mb-1.5">The 30-Second Parent Log</h2>
+      <div class="notebook-paper p-6 sm:p-8 max-w-2xl mx-auto">
+        <h2 class="text-2xl font-bold text-slate-900 mb-1.5">The 30-Second Parent Log</h2>
         <p class="text-sm text-slate-400 mb-6">Grade Ada's performance for today's quest to calibrate future questions.</p>
 
         <form id="log-form" class="space-y-6">
@@ -441,8 +454,8 @@
         <div class="md:col-span-2 space-y-6">
           
           <!-- Level Milestones Card -->
-          <section class="bg-brandSurface border border-brandBorder rounded-xl p-5 shadow-xl">
-            <h2 class="text-lg font-bold text-white mb-1.5">Milestone Tracking</h2>
+          <section class="notebook-paper p-5">
+            <h2 class="text-lg font-bold text-slate-900 mb-1.5">Milestone Tracking</h2>
             <p class="text-xs text-slate-400 mb-6">Compare Ada's current capabilities against High Capable (HiCap) standards.</p>
             
             <div class="space-y-6">
@@ -491,8 +504,8 @@
           </section>
 
           <!-- History Logs Feed -->
-          <section class="bg-brandSurface border border-brandBorder rounded-xl p-5 shadow-xl">
-            <h2 class="text-lg font-bold text-white mb-1">Session History</h2>
+          <section class="notebook-paper p-5">
+            <h2 class="text-lg font-bold text-slate-900 mb-1">Session History</h2>
             <p class="text-xs text-slate-400 mb-4">Past logs recorded locally on this device.</p>
             
             <div id="history-container" class="space-y-3 max-h-96 overflow-y-auto pr-1">
@@ -505,8 +518,8 @@
 
         <!-- Right Side: Cross-Device Sync Utility -->
         <div class="space-y-6">
-          <section class="bg-brandSurface border border-brandBorder rounded-xl p-5 shadow-xl">
-            <h2 class="text-base font-bold text-white mb-1">Data Management</h2>
+          <section class="notebook-paper p-5">
+            <h2 class="text-base font-bold text-slate-900 mb-1">Data Management</h2>
             <p class="text-xs text-slate-400 mb-4">Transfer logs and current levels between your phone and laptop for free.</p>
             
             <div class="space-y-4">
@@ -545,7 +558,7 @@
           </section>
 
           <!-- Self Diagnostics -->
-          <section class="bg-brandSurface border border-brandBorder rounded-xl p-4 shadow-xl">
+          <section class="notebook-paper p-4">
             <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">System Diagnostics</h3>
             <button id="btn-run-tests" class="text-[10px] text-brandPrimary hover:underline block">
               Run System Integrity Self-Checks
@@ -577,9 +590,9 @@
       
       // Remove active states from nav buttons
       const buttons = [
-        { id: 'tab-quest-btn', active: 'bg-brandPrimary text-white shadow-lg', inactive: 'text-slate-400 hover:text-white hover:bg-slate-800' },
-        { id: 'tab-log-btn', active: 'bg-brandPrimary text-white shadow-lg', inactive: 'text-slate-400 hover:text-white hover:bg-slate-800' },
-        { id: 'tab-progress-btn', active: 'bg-brandPrimary text-white shadow-lg', inactive: 'text-slate-400 hover:text-white hover:bg-slate-800' }
+        { id: 'tab-quest-btn', active: 'bg-brandPrimary text-white border-2 border-brandBorder shadow-[3px_3px_0_0_#2d3748]', inactive: 'text-slate-400 hover:text-brandPrimary hover:bg-brandSurfaceHover border-2 border-transparent hover:border-brandBorder hover:shadow-[3px_3px_0_0_#2d3748]' },
+        { id: 'tab-log-btn', active: 'bg-brandPrimary text-white border-2 border-brandBorder shadow-[3px_3px_0_0_#2d3748]', inactive: 'text-slate-400 hover:text-brandPrimary hover:bg-brandSurfaceHover border-2 border-transparent hover:border-brandBorder hover:shadow-[3px_3px_0_0_#2d3748]' },
+        { id: 'tab-progress-btn', active: 'bg-brandPrimary text-white border-2 border-brandBorder shadow-[3px_3px_0_0_#2d3748]', inactive: 'text-slate-400 hover:text-brandPrimary hover:bg-brandSurfaceHover border-2 border-transparent hover:border-brandBorder hover:shadow-[3px_3px_0_0_#2d3748]' }
       ];
 
       buttons.forEach(btnInfo => {

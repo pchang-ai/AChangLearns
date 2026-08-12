@@ -317,15 +317,15 @@ function renderQuest() {
 
       if (cells.length === 4) {
         let gridHtml = `
-          <div class="grid grid-cols-2 gap-4 max-w-sm my-4 bg-slate-900/60 p-4 rounded-xl border border-brandBorder/50">
+          <div class="grid grid-cols-2 gap-4 max-w-sm my-4 bg-slate-900 border-2 border-brandBorder p-4 rounded-2xl shadow-[3px_3px_0_0_#2d3748]">
         `;
         cells.forEach(cell => {
           const isQuestionCell = cell.includes('[ ? ]') || cell.includes('[?]') || cell === '?';
           const cellClass = isQuestionCell 
-            ? 'bg-brandPrimary/10 border-brandPrimary/40 text-brandAccent animate-pulse font-black' 
-            : 'bg-slate-950/80 border border-brandBorder/30 text-slate-100';
+            ? 'bg-brandPrimary/10 border-2 border-brandPrimary text-brandAccent animate-pulse font-black shadow-[2px_2px_0_0_#2d3748]' 
+            : 'bg-brandSurface border-2 border-brandBorder text-slate-900 shadow-[2px_2px_0_0_#2d3748]';
           gridHtml += `
-            <div class="flex flex-col items-center justify-center p-3 rounded-lg text-center min-h-[4.5rem] shadow-sm ${cellClass}">
+            <div class="flex flex-col items-center justify-center p-3 rounded-lg text-center min-h-[4.5rem] ${cellClass}">
               <span class="text-sm sm:text-base font-bold">${escapeHtml(cell)}</span>
             </div>
           `;
@@ -333,12 +333,12 @@ function renderQuest() {
         gridHtml += `</div>`;
 
         html = `
-          <p class="text-base sm:text-lg font-bold text-slate-200">Q${index + 1}. <span class="font-medium text-slate-100">${escapeHtml(questionLabel)}</span></p>
+          <p class="text-base sm:text-lg font-bold text-slate-900">Q${index + 1}. <span class="font-medium text-slate-800 handwritten">${escapeHtml(questionLabel)}</span></p>
           ${gridHtml}
         `;
       } else {
         html = `
-          <p class="text-base sm:text-lg font-bold text-slate-200">Q${index + 1}. <span class="font-medium text-slate-100">${escapeHtml(questionLabel)}</span></p>
+          <p class="text-base sm:text-lg font-bold text-slate-900">Q${index + 1}. <span class="font-medium text-slate-800 handwritten">${escapeHtml(questionLabel)}</span></p>
           <pre class="ascii-matrix bg-slate-950 border border-brandBorder/80 p-4 rounded-xl text-brandAccent text-sm sm:text-base overflow-x-auto my-3 mb-4 shadow-inner">${escapeHtml(asciiOnly)}</pre>
         `;
       }
@@ -349,9 +349,9 @@ function renderQuest() {
       const questionLabel = lines[lines.length - 1] || "";
 
       html = `
-        <p class="text-base sm:text-lg font-bold text-slate-200 mb-2">Q${index + 1}. <span class="font-medium text-slate-100">${escapeHtml(label)}</span></p>
+        <p class="text-base sm:text-lg font-bold text-slate-900 mb-2">Q${index + 1}. <span class="font-medium text-slate-800 handwritten">${escapeHtml(label)}</span></p>
         <pre class="ascii-matrix bg-slate-950 border border-brandBorder/80 p-4 rounded-xl text-brandAccent text-sm sm:text-base overflow-x-auto my-3 mb-4 shadow-inner leading-normal font-mono">${escapeHtml(asciiLines)}</pre>
-        <p class="text-base sm:text-lg font-bold text-slate-200 mt-2">${escapeHtml(questionLabel)}</p>
+        <p class="text-base sm:text-lg font-bold text-slate-900 mt-2 font-black">${escapeHtml(questionLabel)}</p>
       `;
     } else if (isPattern) {
       const lines = q.text.split('\n');
@@ -360,7 +360,7 @@ function renderQuest() {
       const items = parsePatternSequence(patternText);
 
       let patternHtml = `
-        <div class="flex flex-wrap items-center gap-2 my-4 bg-slate-900/40 p-4 rounded-xl border border-brandBorder/40 w-max max-w-full overflow-x-auto">
+        <div class="flex flex-wrap items-center gap-2 my-4 bg-slate-900 border-2 border-brandBorder p-4 rounded-2xl w-max max-w-full overflow-x-auto shadow-[3px_3px_0_0_#2d3748]">
           <div class="flex items-center gap-1.5 sm:gap-2">
       `;
       items.forEach((item, idx) => {
@@ -371,8 +371,8 @@ function renderQuest() {
         }
         const isQuestionCell = item.includes('[ ? ]') || item.includes('[?]') || item === '?';
         const cellClass = isQuestionCell 
-          ? 'bg-brandPrimary/10 border border-brandPrimary/40 text-brandAccent animate-pulse font-black' 
-          : 'bg-slate-950/80 border border-brandBorder/60 text-slate-100';
+          ? 'bg-brandPrimary/10 border-2 border-brandPrimary text-brandAccent animate-pulse font-black shadow-[2px_2px_0_0_#2d3748]' 
+          : 'bg-brandSurface border-2 border-brandBorder text-slate-900 shadow-[2px_2px_0_0_#2d3748]';
         
         const isLongText = item.length > 3 || /[a-zA-Z]/.test(item);
         const textClass = isLongText ? 'text-xs sm:text-sm font-semibold px-3 py-2' : 'text-lg sm:text-xl font-bold px-4 py-2.5';
@@ -389,30 +389,30 @@ function renderQuest() {
       `;
 
       html = `
-        <p class="text-base sm:text-lg font-bold text-slate-200">Q${index + 1}. <span class="font-medium text-slate-100">${escapeHtml(label)}</span></p>
+        <p class="text-base sm:text-lg font-bold text-slate-900">Q${index + 1}. <span class="font-medium text-slate-800 handwritten">${escapeHtml(label)}</span></p>
         ${patternHtml}
       `;
     } else {
-      html = `<p class="text-base sm:text-lg font-bold text-slate-200">Q${index + 1}. <span class="font-medium text-slate-100">${escapeHtml(q.text).replace(/\n/g, '<br>')}</span></p>`;
+      html = `<p class="text-base sm:text-lg font-bold text-slate-900">Q${index + 1}. <span class="font-medium text-slate-800 handwritten">${escapeHtml(q.text).replace(/\n/g, '<br>')}</span></p>`;
     }
 
     // Render options if they exist
     if (q.options) {
       html += `<div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3">`;
       q.options.forEach(opt => {
-        html += `<span class="bg-slate-900 border border-brandBorder/50 px-4 py-2.5 rounded-xl text-sm sm:text-base font-semibold text-slate-200 text-center">${escapeHtml(opt)}</span>`;
+        html += `<span class="bg-brandSurface border-2 border-brandBorder px-4 py-2.5 rounded-xl text-sm sm:text-base font-semibold text-slate-800 text-center shadow-[2px_2px_0_0_#2d3748] hover:bg-slate-50 transition-all select-none cursor-pointer">${escapeHtml(opt)}</span>`;
       });
       html += `</div>`;
     }
     
     // Parent answer key
-    html += `<p class="text-xs sm:text-sm text-slate-400 mt-2.5"><strong class="text-brandAccent">Parent Answer Key:</strong> ${escapeHtml(q.answer)}</p>`;
+    html += `<p class="text-xs sm:text-sm text-slate-500 mt-2.5"><strong class="text-brandAccent">Parent Answer Key:</strong> ${escapeHtml(q.answer)}</p>`;
     
     // Parent Prompt & Elimination Tip Card
     html += `
-      <div class="mt-3 bg-slate-900/60 border border-brandBorder/40 rounded-xl p-3.5 space-y-2 text-xs sm:text-sm">
-        <p class="leading-relaxed text-slate-300"><strong class="text-brandAccent uppercase text-[10px] tracking-wider block mb-0.5">Parent Prompt / Script:</strong> "${escapeHtml(q.parentPrompt)}"</p>
-        <p class="leading-relaxed text-slate-300"><strong class="text-brandAccent uppercase text-[10px] tracking-wider block mb-0.5">Elimination Method:</strong> "${escapeHtml(q.elimination)}"</p>
+      <div class="mt-3 bg-brandSurface border-2 border-dashed border-brandBorder/80 rounded-xl p-3.5 space-y-2 text-xs sm:text-sm">
+        <p class="leading-relaxed text-slate-700"><strong class="text-brandAccent uppercase text-[10px] tracking-wider block mb-0.5">Parent Prompt / Script:</strong> "${escapeHtml(q.parentPrompt)}"</p>
+        <p class="leading-relaxed text-slate-700"><strong class="text-brandAccent uppercase text-[10px] tracking-wider block mb-0.5">Elimination Method:</strong> "${escapeHtml(q.elimination)}"</p>
       </div>
     `;
     
@@ -428,7 +428,7 @@ function renderQuest() {
     if (!q) return;
 
     const div = document.createElement('div');
-    div.className = 'border-l-4 border-brandPrimary/30 pl-4 py-1.5';
+    div.className = 'border-l-4 border-brandPrimary/50 pl-4 py-1.5';
 
     let html = '';
     
@@ -439,21 +439,21 @@ function renderQuest() {
       const question = parts[1] ? parts[1].trim() : '';
       
       html += `
-        <div class="bg-slate-900/40 border border-brandBorder/30 p-4 rounded-xl text-sm sm:text-base italic text-slate-300 mb-3 font-normal leading-relaxed">
+        <div class="bg-brandSurface border-2 border-brandBorder p-4 rounded-xl text-sm sm:text-base italic text-slate-800 mb-3 font-normal leading-relaxed shadow-[2px_2px_0_0_#2d3748] handwritten">
           <strong>Story:</strong> "${escapeHtml(story)}"
         </div>
-        <p class="text-base sm:text-lg font-bold text-slate-200">Q${index + 1}. <span class="font-medium text-slate-100">${escapeHtml(question)}</span></p>
+        <p class="text-base sm:text-lg font-bold text-slate-900">Q${index + 1}. <span class="font-medium text-slate-800 handwritten">${escapeHtml(question)}</span></p>
       `;
     } else {
-      html += `<p class="text-base sm:text-lg font-bold text-slate-200">Q${index + 1}. <span class="font-medium text-slate-100">${escapeHtml(q.text)}</span></p>`;
+      html += `<p class="text-base sm:text-lg font-bold text-slate-900">Q${index + 1}. <span class="font-medium text-slate-800 handwritten">${escapeHtml(q.text)}</span></p>`;
     }
 
     // Render Mandarin translation if active and translation exists
     if (showMandarin && q.translation) {
       html += `
-        <div class="mt-3 mb-4 p-4 bg-slate-900/60 border border-brandPrimary/30 rounded-xl space-y-2">
+        <div class="mt-3 mb-4 p-4 bg-slate-900 border-2 border-brandBorder rounded-xl space-y-2 shadow-[2px_2px_0_0_#2d3748]">
           <p class="text-base font-bold text-brandAccent leading-relaxed">${escapeHtml(q.translation.chinese).replace(/\n/g, '<br>')}</p>
-          <p class="text-sm text-slate-300 italic font-medium leading-relaxed">${escapeHtml(q.translation.pinyin).replace(/\n/g, '<br>')}</p>
+          <p class="text-sm text-slate-500 italic font-medium leading-relaxed">${escapeHtml(q.translation.pinyin).replace(/\n/g, '<br>')}</p>
         </div>
       `;
     }
@@ -462,12 +462,12 @@ function renderQuest() {
     if (q.vocab) {
       html += `
         <div class="mt-3 flex flex-wrap items-center gap-2">
-          <span class="text-xs font-bold uppercase tracking-wider bg-brandPrimary/10 text-brandPrimary px-2.5 py-1 rounded-md border border-brandPrimary/20">Vocab Focus</span>
-          <span class="text-sm sm:text-base font-semibold text-slate-200">${escapeHtml(q.vocab.word)}</span>
+          <span class="text-xs font-bold uppercase tracking-wider bg-brandPrimary/20 text-brandPrimary px-2.5 py-1 rounded-md border border-brandPrimary/30">Vocab Focus</span>
+          <span class="text-sm sm:text-base font-semibold text-slate-800">${escapeHtml(q.vocab.word)}</span>
           ${showMandarin ? `
             <span class="text-sm sm:text-base text-brandAccent font-bold">(${escapeHtml(q.vocab.chinese)} - ${escapeHtml(q.vocab.pinyin)})</span>
           ` : ''}
-          <span class="text-sm sm:text-base text-slate-400 font-normal">: "${escapeHtml(q.vocab.definition)}"</span>
+          <span class="text-sm sm:text-base text-slate-500 font-normal">: "${escapeHtml(q.vocab.definition)}"</span>
         </div>
       `;
     }
@@ -475,14 +475,14 @@ function renderQuest() {
     // Render idiom details if enabled and idiom exists
     if (q.idiom) {
       html += `
-        <div class="mt-3 p-3 bg-slate-900/30 border border-brandBorder/20 rounded-xl">
+        <div class="mt-3 p-3 bg-brandSurface border-2 border-brandBorder rounded-xl shadow-[2px_2px_0_0_#2d3748]">
           <div class="flex items-center gap-2">
             <span class="text-xs font-bold uppercase bg-brandPrimary/20 text-brandPrimary px-2 py-0.5 rounded border border-brandPrimary/30">成语 Chéngyǔ</span>
             ${showMandarin ? `
               <span class="text-sm sm:text-base font-bold text-brandAccent">${escapeHtml(q.idiom.text)} (${escapeHtml(q.idiom.pinyin)})</span>
             ` : `<span class="text-sm sm:text-base font-bold text-brandAccent">${escapeHtml(q.idiom.text)}</span>`}
           </div>
-          <p class="text-xs sm:text-sm text-slate-400 mt-1.5 font-normal">Meaning: ${escapeHtml(q.idiom.meaning)}</p>
+          <p class="text-xs sm:text-sm text-slate-500 mt-1.5 font-normal">Meaning: ${escapeHtml(q.idiom.meaning)}</p>
         </div>
       `;
     }
@@ -491,19 +491,19 @@ function renderQuest() {
     if (q.options) {
       html += `<div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3">`;
       q.options.forEach(opt => {
-        html += `<span class="bg-slate-900 border border-brandBorder/50 px-4 py-2.5 rounded-xl text-sm sm:text-base font-semibold text-slate-200 text-center">${escapeHtml(opt)}</span>`;
+        html += `<span class="bg-brandSurface border-2 border-brandBorder px-4 py-2.5 rounded-xl text-sm sm:text-base font-semibold text-slate-800 text-center shadow-[2px_2px_0_0_#2d3748] hover:bg-slate-50 transition-all select-none cursor-pointer">${escapeHtml(opt)}</span>`;
       });
       html += `</div>`;
     }
 
     // Parent answer key
-    html += `<p class="text-xs sm:text-sm text-slate-400 mt-2.5"><strong class="text-brandPrimary">Parent Answer Key:</strong> ${escapeHtml(q.answer)}</p>`;
+    html += `<p class="text-xs sm:text-sm text-slate-500 mt-2.5"><strong class="text-brandPrimary">Parent Answer Key:</strong> ${escapeHtml(q.answer)}</p>`;
     
     // Parent Prompt & Elimination Tip Card
     html += `
-      <div class="mt-3 bg-slate-900/60 border border-brandBorder/40 rounded-xl p-3.5 space-y-2 text-xs sm:text-sm">
-        <p class="leading-relaxed text-slate-300"><strong class="text-brandPrimary uppercase text-[10px] tracking-wider block mb-0.5">Parent Prompt / Script:</strong> "${escapeHtml(q.parentPrompt)}"</p>
-        <p class="leading-relaxed text-slate-300"><strong class="text-brandPrimary uppercase text-[10px] tracking-wider block mb-0.5">Elimination Method:</strong> "${escapeHtml(q.elimination)}"</p>
+      <div class="mt-3 bg-brandSurface border-2 border-dashed border-brandBorder/80 rounded-xl p-3.5 space-y-2 text-xs sm:text-sm">
+        <p class="leading-relaxed text-slate-700"><strong class="text-brandPrimary uppercase text-[10px] tracking-wider block mb-0.5">Parent Prompt / Script:</strong> "${escapeHtml(q.parentPrompt)}"</p>
+        <p class="leading-relaxed text-slate-700"><strong class="text-brandPrimary uppercase text-[10px] tracking-wider block mb-0.5">Elimination Method:</strong> "${escapeHtml(q.elimination)}"</p>
       </div>
     `;
     
@@ -521,21 +521,21 @@ function renderQuest() {
     div.className = 'space-y-4';
     
     let html = `
-      <p class="text-base sm:text-lg font-bold text-slate-200">Daily Challenge: <span class="font-medium text-slate-100">${escapeHtml(qSel.text)}</span></p>
+      <p class="text-base sm:text-lg font-bold text-slate-900">Daily Challenge: <span class="font-medium text-slate-800 handwritten">${escapeHtml(qSel.text)}</span></p>
     `;
 
     // Render Mandarin translation if active and translation exists
     if (showMandarin && qSel.translation) {
       html += `
-        <div class="mt-3 mb-4 p-4 bg-slate-900/60 border border-brandSuccess/30 rounded-xl space-y-2">
+        <div class="mt-3 mb-4 p-4 bg-slate-900 border-2 border-brandBorder rounded-xl space-y-2 shadow-[2px_2px_0_0_#2d3748]">
           <p class="text-base font-bold text-brandAccent leading-relaxed">${escapeHtml(qSel.translation.chinese)}</p>
-          <p class="text-sm text-slate-300 italic font-medium leading-relaxed">${escapeHtml(qSel.translation.pinyin)}</p>
+          <p class="text-sm text-slate-500 italic font-medium leading-relaxed">${escapeHtml(qSel.translation.pinyin)}</p>
         </div>
       `;
     }
 
     html += `
-      <div class="bg-slate-900/50 border border-brandBorder/40 p-4 rounded-xl text-sm sm:text-base leading-relaxed text-slate-300">
+      <div class="bg-brandSurface border-2 border-brandBorder p-4 rounded-xl text-sm sm:text-base leading-relaxed text-slate-700 shadow-[2px_2px_0_0_#2d3748]">
         <strong class="text-brandSuccess uppercase text-xs tracking-wider block mb-1">Parent Guide:</strong>
         ${escapeHtml(qSel.prompt)}
       </div>
@@ -544,15 +544,15 @@ function renderQuest() {
     // Render Mandarin roleplay scripts if available (Level 3 challenges)
     if (qSel.script) {
       html += `
-        <div class="p-4 bg-slate-900/40 border border-brandBorder/30 rounded-xl">
-          <span class="text-xs font-bold uppercase bg-slate-800 text-slate-300 px-2.5 py-1 rounded border border-brandBorder/50 block w-max mb-3">Public Execution Script</span>
+        <div class="p-4 bg-brandSurface border-2 border-brandBorder rounded-xl shadow-[2px_2px_0_0_#2d3748]">
+          <span class="text-xs font-bold uppercase bg-slate-800 text-slate-100 px-2.5 py-1 rounded border border-brandBorder block w-max mb-3">Public Execution Script</span>
           <div class="space-y-2">
-            <p class="text-sm sm:text-base font-semibold text-slate-200">English: <span class="font-medium text-slate-100">"${escapeHtml(qSel.script.english)}"</span></p>
+            <p class="text-sm sm:text-base font-semibold text-slate-800">English: <span class="font-medium text-slate-700">"${escapeHtml(qSel.script.english)}"</span></p>
             ${showMandarin ? `
               <p class="text-sm sm:text-base font-bold text-brandAccent">Mandarin: <span class="font-bold text-base sm:text-lg">"${escapeHtml(qSel.script.chinese)}"</span></p>
               <p class="text-sm sm:text-base text-brandPrimary font-semibold">Pinyin: <span class="font-normal italic">"${escapeHtml(qSel.script.pinyin)}"</span></p>
             ` : `
-              <p class="text-xs sm:text-sm text-slate-400 italic font-normal">Pinyin/Chinese script translation toggled off. Press the "Chinese/Pinyin" button in Block 2 to reveal.</p>
+              <p class="text-xs sm:text-sm text-slate-500 italic font-normal">Pinyin/Chinese script translation toggled off. Press the "Chinese/Pinyin" button in Block 2 to reveal.</p>
             `}
           </div>
         </div>
@@ -619,7 +619,7 @@ function renderHistory() {
   
   sortedHistory.forEach(log => {
     const div = document.createElement('div');
-    div.className = 'bg-slate-900 border border-brandBorder/60 rounded-lg p-3.5 space-y-2 text-xs';
+    div.className = 'bg-brandSurface border-2 border-brandBorder shadow-[2px_2px_0_0_#2d3748] rounded-xl p-3.5 space-y-2 text-xs text-slate-800';
 
     const dateStr = new Date(log.timestamp).toLocaleDateString(undefined, {
       month: 'short',
@@ -638,14 +638,14 @@ function renderHistory() {
     `;
 
     div.innerHTML = `
-      <div class="flex justify-between items-center text-slate-400 text-[10px]">
-        <span class="font-semibold text-slate-300">${escapeHtml(dateStr)}</span>
-        <span class="font-mono text-[9px] bg-slate-800 px-1 py-0.5 rounded border border-brandBorder/40">Log Entry</span>
+      <div class="flex justify-between items-center text-slate-500 text-[10px]">
+        <span class="font-semibold text-slate-500">${escapeHtml(dateStr)}</span>
+        <span class="font-mono text-[9px] bg-slate-900 px-1 py-0.5 rounded border border-brandBorder/40">Log Entry</span>
       </div>
       ${scoresHtml}
       ${log.comment ? `
-        <div class="mt-2 text-slate-300 bg-brandSurface/40 border border-brandBorder/30 p-2 rounded leading-relaxed">
-          <span class="font-semibold text-slate-400 block text-[10px]">Observations:</span>
+        <div class="mt-2 text-slate-700 bg-slate-900 border-2 border-brandBorder border-dashed p-2 rounded-lg leading-relaxed">
+          <span class="font-semibold text-slate-500 block text-[10px]">Observations:</span>
           "${escapeHtml(log.comment)}"
         </div>
       ` : ''}

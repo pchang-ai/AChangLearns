@@ -1,21 +1,23 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&family=Patrick+Hand&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 :root {
-  --color-bg: #0b0f19;
-  --color-surface: #151c2c;
-  --color-surface-hover: #1e293b;
-  --color-border: #334155;
-  --color-text-primary: #f8fafc;
-  --color-text-secondary: #94a3b8;
-  --color-primary: #6366f1; /* Indigo */
-  --color-accent: #f59e0b;  /* Amber */
-  --color-success: #10b981; /* Emerald */
-  --color-error: #ef4444;   /* Red */
+  --color-bg: #faf8f2;          /* Warm cream paper background */
+  --color-surface: #ffffff;     /* White paper sheet */
+  --color-surface-hover: #f8fafc;
+  --color-border: #2d3748;      /* Pencil charcoal */
+  --color-text-primary: #1e293b;/* Dark slate */
+  --color-text-secondary: #475569;
+  --color-primary: #2563eb;     /* Crayon blue */
+  --color-accent: #ea580c;      /* Crayon orange */
+  --color-success: #16a34a;     /* Chalkboard green */
+  --color-error: #dc2626;       /* Correction red */
 }
 
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family: 'Fredoka', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   background-color: var(--color-bg);
+  background-image: radial-gradient(#cbd5e1 1.2px, transparent 1.2px);
+  background-size: 20px 20px;   /* Clean modern dot-grid paper */
   color: var(--color-text-primary);
   min-height: 100vh;
   margin: 0;
@@ -32,7 +34,64 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+/* Handwritten font style for educational context */
+.handwritten {
+  font-family: 'Patrick Hand', cursive, sans-serif;
+  font-size: 1.2rem;
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+}
+
+/* Notebook paper sheet look */
+.notebook-paper {
+  position: relative;
+  background-color: #ffffff;
+  border: 2px solid var(--color-border);
+  border-radius: 20px;
+  box-shadow: 4px 4px 0 0 var(--color-border);
+  padding: 1.5rem 1.5rem 1.5rem 2.25rem; /* extra left padding for margin line */
+  overflow: hidden;
+}
+
+/* Red margin line like school lined paper */
+.notebook-paper::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 1.5rem;
+  width: 2px;
+  background-color: #f43f5e; /* Rose margin line */
+  opacity: 0.6;
+}
+
+/* Playful Sticky Note styling */
+.sticky-note {
+  background-color: #fffbeb !important; /* Yellow note */
+  border: 2px solid var(--color-border) !important;
+  border-radius: 12px;
+  box-shadow: 4px 4px 0 0 var(--color-border) !important;
+  transform: rotate(-0.5deg);
+  transition: transform 0.2s ease-in-out;
+}
+
+.sticky-note:hover {
+  transform: rotate(0.5deg) scale(1.01);
+}
+
+/* Chalkboard style header */
+.chalkboard-header {
+  background-color: #14532d; /* Chalkboard dark green */
+  border: 8px solid #854d0e; /* Wooden frame */
+  border-radius: 12px;
+  color: #f8fafc;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 4px 4px 0 0 var(--color-border);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
 }
 
 /* Monospace spacing for ASCII matrices */
@@ -40,6 +99,9 @@ h1, h2, h3, h4, h5, h6 {
   font-family: 'JetBrains Mono', 'Courier New', Courier, monospace;
   line-height: 1.4;
   white-space: pre;
+  color: var(--color-border) !important;
+  background-color: #f8fafc !important;
+  border: 2px dashed #cbd5e1 !important;
 }
 
 /* Smooth transitions for tab changes */
@@ -49,7 +111,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .tab-content.active {
   display: block;
-  animation: fadeIn 0.2s ease-out-forward;
+  animation: fadeIn 0.2s ease-out forwards;
 }
 
 @keyframes fadeIn {
@@ -65,8 +127,8 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Scrollbar styling */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
 }
 
 ::-webkit-scrollbar-track {
@@ -74,25 +136,27 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--color-border);
-  border-radius: 4px;
+  background: #cbd5e1;
+  border: 2px solid var(--color-bg);
+  border-radius: 6px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-text-secondary);
+  background: #94a3b8;
 }
 
 /* Focus styles for accessibility */
 button:focus, input:focus, select:focus, textarea:focus {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 2px;
+  outline: 3px solid var(--color-primary);
+  outline-offset: 1px;
 }
 
 /* Print Styles */
 @media print {
   body {
-    background: white;
-    color: black;
+    background: white !important;
+    background-image: none !important;
+    color: black !important;
   }
   
   .no-print {
@@ -106,6 +170,11 @@ button:focus, input:focus, select:focus, textarea:focus {
     box-shadow: none !important;
     page-break-inside: avoid;
     margin-bottom: 2rem;
+    padding-left: 1.5rem !important;
+  }
+  
+  .print-card::before {
+    display: none !important;
   }
 
   .ascii-matrix {
