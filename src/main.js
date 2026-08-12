@@ -317,7 +317,7 @@ function renderQuest() {
 
       if (cells.length === 4) {
         let gridHtml = `
-          <div class="grid grid-cols-2 gap-4 max-w-sm my-4 bg-slate-900 border-2 border-brandBorder p-4 rounded-2xl shadow-[3px_3px_0_0_#2d3748]">
+          <div class="grid grid-cols-2 gap-4 max-w-sm my-4 bg-slate-100 border-2 border-brandBorder p-4 rounded-2xl shadow-[3px_3px_0_0_#2d3748]">
         `;
         cells.forEach(cell => {
           const isQuestionCell = cell.includes('[ ? ]') || cell.includes('[?]') || cell === '?';
@@ -360,7 +360,7 @@ function renderQuest() {
       const items = parsePatternSequence(patternText);
 
       let patternHtml = `
-        <div class="flex flex-wrap items-center gap-2 my-4 bg-slate-900 border-2 border-brandBorder p-4 rounded-2xl w-max max-w-full overflow-x-auto shadow-[3px_3px_0_0_#2d3748]">
+        <div class="flex flex-wrap items-center gap-2 my-4 bg-slate-100 border-2 border-brandBorder p-4 rounded-2xl w-max max-w-full overflow-x-auto shadow-[3px_3px_0_0_#2d3748]">
           <div class="flex items-center gap-1.5 sm:gap-2">
       `;
       items.forEach((item, idx) => {
@@ -451,9 +451,9 @@ function renderQuest() {
     // Render Mandarin translation if active and translation exists
     if (showMandarin && q.translation) {
       html += `
-        <div class="mt-3 mb-4 p-4 bg-slate-900 border-2 border-brandBorder rounded-xl space-y-2 shadow-[2px_2px_0_0_#2d3748]">
+        <div class="mt-3 mb-4 p-4 bg-slate-100 border-2 border-brandBorder rounded-xl space-y-2 shadow-[2px_2px_0_0_#2d3748]">
           <p class="text-base font-bold text-brandAccent leading-relaxed">${escapeHtml(q.translation.chinese).replace(/\n/g, '<br>')}</p>
-          <p class="text-sm text-slate-500 italic font-medium leading-relaxed">${escapeHtml(q.translation.pinyin).replace(/\n/g, '<br>')}</p>
+          <p class="text-sm text-slate-700 italic font-semibold leading-relaxed">${escapeHtml(q.translation.pinyin).replace(/\n/g, '<br>')}</p>
         </div>
       `;
     }
@@ -467,7 +467,7 @@ function renderQuest() {
           ${showMandarin ? `
             <span class="text-sm sm:text-base text-brandAccent font-bold">(${escapeHtml(q.vocab.chinese)} - ${escapeHtml(q.vocab.pinyin)})</span>
           ` : ''}
-          <span class="text-sm sm:text-base text-slate-500 font-normal">: "${escapeHtml(q.vocab.definition)}"</span>
+          <span class="text-sm sm:text-base text-slate-700 font-normal">: "${escapeHtml(q.vocab.definition)}"</span>
         </div>
       `;
     }
@@ -482,7 +482,7 @@ function renderQuest() {
               <span class="text-sm sm:text-base font-bold text-brandAccent">${escapeHtml(q.idiom.text)} (${escapeHtml(q.idiom.pinyin)})</span>
             ` : `<span class="text-sm sm:text-base font-bold text-brandAccent">${escapeHtml(q.idiom.text)}</span>`}
           </div>
-          <p class="text-xs sm:text-sm text-slate-500 mt-1.5 font-normal">Meaning: ${escapeHtml(q.idiom.meaning)}</p>
+          <p class="text-xs sm:text-sm text-slate-700 mt-1.5 font-medium">Meaning: ${escapeHtml(q.idiom.meaning)}</p>
         </div>
       `;
     }
@@ -527,9 +527,9 @@ function renderQuest() {
     // Render Mandarin translation if active and translation exists
     if (showMandarin && qSel.translation) {
       html += `
-        <div class="mt-3 mb-4 p-4 bg-slate-900 border-2 border-brandBorder rounded-xl space-y-2 shadow-[2px_2px_0_0_#2d3748]">
+        <div class="mt-3 mb-4 p-4 bg-slate-100 border-2 border-brandBorder rounded-xl space-y-2 shadow-[2px_2px_0_0_#2d3748]">
           <p class="text-base font-bold text-brandAccent leading-relaxed">${escapeHtml(qSel.translation.chinese)}</p>
-          <p class="text-sm text-slate-500 italic font-medium leading-relaxed">${escapeHtml(qSel.translation.pinyin)}</p>
+          <p class="text-sm text-slate-700 italic font-semibold leading-relaxed">${escapeHtml(qSel.translation.pinyin)}</p>
         </div>
       `;
     }
@@ -638,14 +638,14 @@ function renderHistory() {
     `;
 
     div.innerHTML = `
-      <div class="flex justify-between items-center text-slate-500 text-[10px]">
-        <span class="font-semibold text-slate-500">${escapeHtml(dateStr)}</span>
-        <span class="font-mono text-[9px] bg-slate-900 px-1 py-0.5 rounded border border-brandBorder/40">Log Entry</span>
+      <div class="flex justify-between items-center text-slate-600 text-[10px]">
+        <span class="font-semibold text-slate-700">${escapeHtml(dateStr)}</span>
+        <span class="font-mono text-[9px] bg-slate-200 px-1 py-0.5 rounded border border-brandBorder/40 text-slate-800">Log Entry</span>
       </div>
       ${scoresHtml}
       ${log.comment ? `
-        <div class="mt-2 text-slate-700 bg-slate-900 border-2 border-brandBorder border-dashed p-2 rounded-lg leading-relaxed">
-          <span class="font-semibold text-slate-500 block text-[10px]">Observations:</span>
+        <div class="mt-2 text-slate-800 bg-slate-50 border-2 border-brandBorder border-dashed p-2 rounded-lg leading-relaxed">
+          <span class="font-semibold text-slate-600 block text-[10px]">Observations:</span>
           "${escapeHtml(log.comment)}"
         </div>
       ` : ''}
