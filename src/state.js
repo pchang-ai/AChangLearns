@@ -2,6 +2,23 @@ import { MATH_MATRIX, READING_MATRIX, SEL_MATRIX } from './data.js';
 
 const STORAGE_KEY = 'a_chang_learns_state_v1';
 
+// Robust level-pool selector (falls back to highest available level in data)
+export function getMatrixLevelPool(matrix, level) {
+  const availableLevels = Object.keys(matrix).map(Number);
+  const maxAvailable = Math.max(...availableLevels);
+  const targetLevel = Math.min(level, maxAvailable);
+  return matrix[targetLevel] || [];
+}
+
+// Searches for a question ID across all levels in a curriculum matrix
+export function findQuestionById(matrix, id) {
+  for (const lvl of Object.keys(matrix)) {
+    const found = matrix[lvl].find(q => q.id === id);
+    if (found) return found;
+  }
+  return null;
+}
+
 export function getDefaultState() {
   const state = {
     levels: {
@@ -62,9 +79,9 @@ export function generateNewQuest(state) {
     }
   }
 
-  const mathPool = MATH_MATRIX[state.levels.math] || [];
-  const readingPool = READING_MATRIX[state.levels.reading] || [];
-  const selPool = SEL_MATRIX[state.levels.sel] || [];
+  const mathPool = getMatrixLevelPool(MATH_MATRIX, state.levels.math);
+  const readingPool = getMatrixLevelPool(READING_MATRIX, state.levels.reading);
+  const selPool = getMatrixLevelPool(SEL_MATRIX, state.levels.sel);
 
   state.currentQuest = {
     mathIds: selectUniqueIds(mathPool, 5, prevMathIds),
@@ -118,21 +135,21 @@ export function submitLog(state, scores, comment) {
 
   // Update Math Level
   if (scores.math === 'mastered') {
-    state.levels.math = Math.min(5, state.levels.math + 1);
+    state.levels.math = Math.min(10, state.levels.math + 1);
   } else if (scores.math === 'struggled') {
     state.levels.math = Math.max(1, state.levels.math - 1);
   }
 
   // Update Reading Level
   if (scores.reading === 'mastered') {
-    state.levels.reading = Math.min(5, state.levels.reading + 1);
+    state.levels.reading = Math.min(10, state.levels.reading + 1);
   } else if (scores.reading === 'struggled') {
     state.levels.reading = Math.max(1, state.levels.reading - 1);
   }
 
   // Update SEL Level
   if (scores.sel === 'mastered') {
-    state.levels.sel = Math.min(5, state.levels.sel + 1);
+    state.levels.sel = Math.min(10, state.levels.sel + 1);
   } else if (scores.sel === 'struggled') {
     state.levels.sel = Math.max(1, state.levels.sel - 1);
   }
@@ -159,7 +176,9 @@ export function submitLog(state, scores, comment) {
 
 export function addMoreQuestionsToState(state, type) {
   const currentIds = type === 'math' ? state.currentQuest.mathIds : state.currentQuest.readingIds;
-  const pool = type === 'math' ? MATH_MATRIX[state.levels.math] : READING_MATRIX[state.levels.reading];
+  const pool = type === 'math' 
+    ? getMatrixLevelPool(MATH_MATRIX, state.levels.math) 
+    : getMatrixLevelPool(READING_MATRIX, state.levels.reading);
   
   // Eligible questions are those not already in the current quest
   let eligible = pool.filter(q => !currentIds.includes(q.id));
@@ -248,6 +267,13 @@ export function runSelfTests() {
   const importResult = importStateFromString(exportStr);
   if (!importResult.success) return "Fail: Base64 data import";
   if (importResult.state.levels.math !== 4) return "Fail: Imported state level integrity";
+
+  // Test Level 10 upper boundary
+  testState.levels.math = 9;
+  submitLog(testState, { math: "mastered", reading: "hint", sel: "hint" }, "Boundary test");
+  if (testState.levels.math !== 10) return "Fail: Math level up to 10 boundary";
+  submitLog(testState, { math: "mastered", reading: "hint", sel: "hint" }, "Limit test");
+  if (testState.levels.math !== 10) return "Fail: Math level ceiling limit at 10";
   
   return "All system tests passed successfully!";
 }

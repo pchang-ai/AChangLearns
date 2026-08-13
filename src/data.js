@@ -6,8 +6,13 @@ export const DIFFICULTY_TIERS = {
   1: { name: "Level 1: Advanced Foundation", description: "Late K / Early 1st Grade. Counts past 100, crosses decades, isolates simple phonics." },
   2: { name: "Level 2: Intermediate Explorer", description: "Late 1st Grade. Single-digit visual equations, simple 2x2 shape matrices." },
   3: { name: "Level 3: Advanced Analyst", description: "Early 2nd Grade. Double-digit math (regrouping context), multi-variable scales, character motivative recall." },
-  4: { name: "Level 4: Scholar Prep", description: "Late 2nd / Early 3rd Grade. Spatial rotations, 3D block counts, multiplication rules, semantic analogies." },
-  5: { name: "Level 5: HiCap Gifted Elite", description: "3rd Grade +. Complex multi-attribute matrices, paper-folding geometry, advanced systems of balance, abstract reasoning." }
+  4: { name: "Level 4: Scholar Prep", description: "Late 2nd / Early 3rd Grade. Spatial rotations, 3D block counts, multiplication rules, semantic analogies. [⭐ HiCap Qualified Target]" },
+  5: { name: "Level 5: HiCap Gifted Elite", description: "3rd Grade +. Complex multi-attribute matrices, paper-folding geometry, advanced systems of balance, abstract reasoning. [🏆 HiCap Accelerated Standard]" },
+  6: { name: "Level 6: Gifted Master (Grade 3/4 Core)", description: "Advanced 3rd / Early 4th Grade. Logical negation matrices, multi-step word relationships, spatial translations. [🏆 Accelerated Mastery]" },
+  7: { name: "Level 7: Scholar Supreme (Grade 4 Core)", description: "4th Grade Core. Advanced fractions sequencing, double analogies, complex situational empathy script validation." },
+  8: { name: "Level 8: Academic Champion (Grade 4/5 Core)", description: "Advanced 4th / Early 5th Grade. Variable logic, system transformations, advanced context-vocabulary inference." },
+  9: { name: "Level 9: Junior Innovator (Grade 5 Core)", description: "5th Grade Core. Combinatorics logic (permutations foundations), abstract semantic synthesis, cross-cultural idiomatic comprehension." },
+  10: { name: "Level 10: Antigravity Scholar (Grade 5/6 Core)", description: "Late 5th / 6th Grade. Algebraic induction matrices, logical paradox analysis, high-level social-emotional conflict resolution scripting." }
 };
 
 export const MATH_MATRIX = {

@@ -1,5 +1,73 @@
 import { DIFFICULTY_TIERS, MATH_MATRIX, READING_MATRIX, SEL_MATRIX } from './data.js';
-import { loadState, saveState, submitLog, exportStateToString, importStateFromString, runSelfTests, generateNewQuest, addMoreQuestionsToState } from './state.js';
+import { loadState, saveState, submitLog, exportStateToString, importStateFromString, runSelfTests, generateNewQuest, addMoreQuestionsToState, findQuestionById, getMatrixLevelPool } from './state.js';
+
+// Strips leading alphabetical markers like A) B) C) from answer keys or options
+function cleanOptionText(opt) {
+  if (!opt) return '';
+  return opt.replace(/^[A-E]\)\s*/, '').trim();
+}
+
+// Helper to shuffle choices in the UI
+function shuffleArray(array) {
+  const arr = [...array];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+// Interactive answer validation callback
+window.selectOption = function(element, cleanAnswer) {
+  const parent = element.parentElement;
+  const options = parent.querySelectorAll('span');
+  const cleanClicked = cleanOptionText(element.innerText);
+
+  options.forEach(opt => {
+    opt.classList.remove(
+      'bg-emerald-100', 'border-emerald-500', 'text-emerald-950', 'ring-2', 'ring-emerald-400',
+      'bg-rose-100', 'border-rose-500', 'text-rose-950', 'ring-2', 'ring-rose-400'
+    );
+    const cleanOptText = cleanOptionText(opt.innerText);
+    if (cleanOptText === cleanAnswer) {
+      opt.classList.add('bg-emerald-100', 'border-emerald-500', 'text-emerald-950', 'ring-2', 'ring-emerald-400');
+    }
+  });
+
+  if (cleanClicked !== cleanAnswer) {
+    element.classList.add('bg-rose-100', 'border-rose-500', 'text-rose-950', 'ring-2', 'ring-rose-400');
+  }
+};
+
+// Determines the exact CogAT/Naglieri assessment domain targeted by a question
+function getCognitiveFocus(qText, type) {
+  if (type === 'math') {
+    const textLower = qText.toLowerCase();
+    if (textLower.includes('shape matrix') || textLower.includes('matrix')) {
+      return "Spatial Matrix Reasoning (Naglieri / CogAT Non-Verbal)";
+    }
+    if (qText.includes('+---')) {
+      return "3D Spatial Relations & Visual Arithmetic (CogAT Non-Verbal)";
+    }
+    if (textLower.includes('pattern') || textLower.includes('sequence')) {
+      return "Visual Sequence Progression & Pattern Completion (Naglieri)";
+    }
+    return "Quantitative Logic & Sequential Induction (CogAT Quantitative)";
+  } else if (type === 'reading') {
+    if (qText.includes('Story:')) {
+      return "Narrative Memory & Direct-Recall Comprehension (CogAT / Iowa)";
+    }
+    if (qText.includes(':') && qText.includes('::')) {
+      return "Verbal Analogies & Semantic Relations (CogAT Verbal)";
+    }
+    if (qText.toLowerCase().includes('idiom') || qText.toLowerCase().includes('成语')) {
+      return "Cultural Metaphors & Idiomatic Translation (Verbal Logic)";
+    }
+    return "Context Vocabulary & Semantic Inference (CogAT / Iowa Verbal)";
+  } else {
+    return "Social-Emotional Scripting & Adaptive Behavior (SEL)";
+  }
+}
 
 // Global application state instance
 let appState = null;
@@ -297,7 +365,7 @@ function renderQuest() {
   mathContainer.innerHTML = '';
   const currentMathIds = appState.currentQuest.mathIds || [];
   currentMathIds.forEach((id, index) => {
-    const q = MATH_MATRIX[appState.levels.math]?.find(item => item.id === id);
+    const q = findQuestionById(MATH_MATRIX, id);
     if (!q) return;
 
     const div = document.createElement('div');
@@ -398,9 +466,15 @@ function renderQuest() {
 
     // Render options if they exist
     if (q.options) {
+      const cleanCorrect = cleanOptionText(q.answer);
+      const cleanedOpts = q.options.map(cleanOptionText);
+      const shuffledOpts = shuffleArray(cleanedOpts);
+      
       html += `<div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3">`;
-      q.options.forEach(opt => {
-        html += `<span class="bg-brandSurface border-2 border-brandBorder px-4 py-2.5 rounded-xl text-sm sm:text-base font-semibold text-slate-800 text-center shadow-[2px_2px_0_0_#2d3748] hover:bg-slate-50 transition-all select-none cursor-pointer">${escapeHtml(opt)}</span>`;
+      shuffledOpts.forEach((opt, idx) => {
+        const letter = String.fromCharCode(65 + idx); // A, B, C, D...
+        const prefixedOpt = `${letter}) ${opt}`;
+        html += `<span onclick="window.selectOption(this, '${escapeHtml(cleanCorrect)}')" class="bg-brandSurface border-2 border-brandBorder px-4 py-2.5 rounded-xl text-sm sm:text-base font-semibold text-slate-800 text-center shadow-[2px_2px_0_0_#2d3748] hover:bg-slate-50 transition-all select-none cursor-pointer">${escapeHtml(prefixedOpt)}</span>`;
       });
       html += `</div>`;
     }
@@ -416,6 +490,7 @@ function renderQuest() {
         </summary>
         <div class="mt-2.5 pt-2.5 border-t border-brandBorder/20 space-y-2">
           <p class="text-xs sm:text-sm text-slate-800"><strong class="text-brandAccent">Parent Answer Key:</strong> ${escapeHtml(q.answer)}</p>
+          <p class="text-xs text-slate-750 font-medium leading-relaxed"><strong class="text-brandAccent">HiCap Prep Focus:</strong> ${escapeHtml(getCognitiveFocus(q.text, 'math'))}</p>
           <div class="bg-brandSurface border-2 border-dashed border-brandBorder/80 rounded-xl p-3.5 space-y-2 text-xs sm:text-sm shadow-sm">
             <p class="leading-relaxed text-slate-700"><strong class="text-brandAccent uppercase text-[10px] tracking-wider block mb-0.5">Parent Prompt / Script:</strong> "${escapeHtml(q.parentPrompt)}"</p>
             <p class="leading-relaxed text-slate-700"><strong class="text-brandAccent uppercase text-[10px] tracking-wider block mb-0.5">Elimination Method:</strong> "${escapeHtml(q.elimination)}"</p>
@@ -432,7 +507,7 @@ function renderQuest() {
   readingContainer.innerHTML = '';
   const currentReadingIds = appState.currentQuest.readingIds || [];
   currentReadingIds.forEach((id, index) => {
-    const q = READING_MATRIX[appState.levels.reading]?.find(item => item.id === id);
+    const q = findQuestionById(READING_MATRIX, id);
     if (!q) return;
 
     const div = document.createElement('div');
@@ -497,9 +572,15 @@ function renderQuest() {
 
     // Render options if they exist
     if (q.options) {
+      const cleanCorrect = cleanOptionText(q.answer);
+      const cleanedOpts = q.options.map(cleanOptionText);
+      const shuffledOpts = shuffleArray(cleanedOpts);
+      
       html += `<div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3">`;
-      q.options.forEach(opt => {
-        html += `<span class="bg-brandSurface border-2 border-brandBorder px-4 py-2.5 rounded-xl text-sm sm:text-base font-semibold text-slate-800 text-center shadow-[2px_2px_0_0_#2d3748] hover:bg-slate-50 transition-all select-none cursor-pointer">${escapeHtml(opt)}</span>`;
+      shuffledOpts.forEach((opt, idx) => {
+        const letter = String.fromCharCode(65 + idx); // A, B, C, D...
+        const prefixedOpt = `${letter}) ${opt}`;
+        html += `<span onclick="window.selectOption(this, '${escapeHtml(cleanCorrect)}')" class="bg-brandSurface border-2 border-brandBorder px-4 py-2.5 rounded-xl text-sm sm:text-base font-semibold text-slate-800 text-center shadow-[2px_2px_0_0_#2d3748] hover:bg-slate-50 transition-all select-none cursor-pointer">${escapeHtml(prefixedOpt)}</span>`;
       });
       html += `</div>`;
     }
@@ -515,6 +596,7 @@ function renderQuest() {
         </summary>
         <div class="mt-2.5 pt-2.5 border-t border-brandBorder/20 space-y-2">
           <p class="text-xs sm:text-sm text-slate-800"><strong class="text-brandPrimary">Parent Answer Key:</strong> ${escapeHtml(q.answer)}</p>
+          <p class="text-xs text-slate-755 font-medium leading-relaxed"><strong class="text-brandPrimary">HiCap Prep Focus:</strong> ${escapeHtml(getCognitiveFocus(q.text, 'reading'))}</p>
           <div class="bg-brandSurface border-2 border-dashed border-brandBorder/80 rounded-xl p-3.5 space-y-2 text-xs sm:text-sm shadow-sm">
             <p class="leading-relaxed text-slate-700"><strong class="text-brandPrimary uppercase text-[10px] tracking-wider block mb-0.5">Parent Prompt / Script:</strong> "${escapeHtml(q.parentPrompt)}"</p>
             <p class="leading-relaxed text-slate-700"><strong class="text-brandPrimary uppercase text-[10px] tracking-wider block mb-0.5">Elimination Method:</strong> "${escapeHtml(q.elimination)}"</p>
@@ -530,39 +612,41 @@ function renderQuest() {
   // 3. Render SEL Block (1 challenge script)
   selContainer.innerHTML = '';
   const currentSelId = appState.currentQuest.selId;
-  const qSel = SEL_MATRIX[appState.levels.sel]?.find(item => item.id === currentSelId);
-  
-  if (qSel) {
-    const div = document.createElement('div');
-    div.className = 'space-y-4';
+  const qSel = findQuestionById(SEL_MATRIX, currentSelId);
     
-    let html = `
-      <p class="text-base sm:text-lg font-bold text-slate-900">Daily Challenge: <span class="font-medium text-slate-800 handwritten">${escapeHtml(qSel.text)}</span></p>
-    `;
-
-    // Render Mandarin translation if active and translation exists
-    if (showMandarin && qSel.translation) {
-      html += `
-        <div class="mt-3 mb-4 p-4 bg-slate-100 border-2 border-brandBorder rounded-xl space-y-2 shadow-[2px_2px_0_0_#2d3748]">
-          <p class="text-base font-bold text-brandAccent leading-relaxed">${escapeHtml(qSel.translation.chinese)}</p>
-          <p class="text-sm text-slate-700 italic font-semibold leading-relaxed">${escapeHtml(qSel.translation.pinyin)}</p>
-        </div>
+    if (qSel) {
+      const div = document.createElement('div');
+      div.className = 'space-y-4';
+      
+      let html = `
+        <p class="text-base sm:text-lg font-bold text-slate-900">Daily Challenge: <span class="font-medium text-slate-800 handwritten">${escapeHtml(qSel.text)}</span></p>
       `;
-    }
 
-    // Reveal Parent Guide and roleplay scripts (Hidden by default)
-    html += `
-      <details class="no-print mt-3 group border-2 border-brandBorder/60 rounded-xl p-3 bg-slate-50 shadow-sm">
-        <summary class="flex items-center gap-1.5 text-xs font-bold text-slate-700 hover:text-slate-900 cursor-pointer select-none outline-none list-none [&::-webkit-details-marker]:hidden">
-          <svg class="w-3.5 h-3.5 transform transition-transform duration-200 group-open:rotate-90 text-brandSuccess" fill="none" stroke="currentColor" stroke-width="3.5" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
-          </svg>
-          <span class="uppercase tracking-wider">Reveal Parent Guide & Script</span>
-        </summary>
-        <div class="mt-2.5 pt-2.5 border-t border-brandBorder/20 space-y-3">
-          <div class="bg-brandSurface border-2 border-brandBorder p-4 rounded-xl text-sm sm:text-base leading-relaxed text-slate-700 shadow-[2px_2px_0_0_#2d3748]">
-            <strong class="text-brandSuccess uppercase text-xs tracking-wider block mb-1">Parent Guide:</strong>
-            ${escapeHtml(qSel.prompt)}
+      // Render Mandarin translation if active and translation exists
+      if (showMandarin && qSel.translation) {
+        html += `
+          <div class="mt-3 mb-4 p-4 bg-slate-100 border-2 border-brandBorder rounded-xl space-y-2 shadow-[2px_2px_0_0_#2d3748]">
+            <p class="text-base font-bold text-brandAccent leading-relaxed">${escapeHtml(qSel.translation.chinese)}</p>
+            <p class="text-sm text-slate-700 italic font-semibold leading-relaxed">${escapeHtml(qSel.translation.pinyin)}</p>
+          </div>
+        `;
+      }
+
+      // Reveal Parent Guide and roleplay scripts (Hidden by default)
+      html += `
+        <details class="no-print mt-3 group border-2 border-brandBorder/60 rounded-xl p-3 bg-slate-50 shadow-sm">
+          <summary class="flex items-center gap-1.5 text-xs font-bold text-slate-700 hover:text-slate-900 cursor-pointer select-none outline-none list-none [&::-webkit-details-marker]:hidden">
+            <svg class="w-3.5 h-3.5 transform transition-transform duration-200 group-open:rotate-90 text-brandSuccess" fill="none" stroke="currentColor" stroke-width="3.5" viewBox="0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+            </svg>
+            <span class="uppercase tracking-wider">Reveal Parent Guide & Script</span>
+          </summary>
+          <div class="mt-2.5 pt-2.5 border-t border-brandBorder/20 space-y-3">
+            <p class="text-xs text-slate-755 font-medium leading-relaxed"><strong class="text-brandSuccess">HiCap Prep Focus:</strong> ${escapeHtml(getCognitiveFocus(qSel.text, 'sel'))}</p>
+            <div class="bg-brandSurface border-2 border-brandBorder p-4 rounded-xl text-sm sm:text-base leading-relaxed text-slate-700 shadow-[2px_2px_0_0_#2d3748]">
+              <strong class="text-brandSuccess uppercase text-xs tracking-wider block mb-1">Parent Guide:</strong>
+              ${escapeHtml(qSel.prompt)}
+            </div>
           </div>
     `;
 
@@ -612,22 +696,26 @@ function renderProgress() {
 
   if (!mathLabel || !mathBar || !mathDesc || !readingLabel || !readingBar || !readingDesc || !selLabel || !selBar || !selDesc) return;
 
-  // Math Level calculations
   const mathLvl = appState.levels.math;
-  mathLabel.textContent = `Level ${mathLvl} / 5`;
-  mathBar.style.width = `${(mathLvl / 5) * 100}%`;
+  const readingLvl = appState.levels.reading;
+  const selLvl = appState.levels.sel;
+  
+  // Dynamic scale benchmark: starts at 5 for early prep, scales to 10 when Level 5 is exceeded
+  const maxScale = Math.max(mathLvl, readingLvl, selLvl) > 5 ? 10 : 5;
+
+  // Math Level calculations
+  mathLabel.textContent = `Level ${mathLvl} / ${maxScale}`;
+  mathBar.style.width = `${(mathLvl / maxScale) * 100}%`;
   mathDesc.textContent = DIFFICULTY_TIERS[mathLvl]?.description || '';
 
   // Reading Level
-  const readingLvl = appState.levels.reading;
-  readingLabel.textContent = `Level ${readingLvl} / 5`;
-  readingBar.style.width = `${(readingLvl / 5) * 100}%`;
+  readingLabel.textContent = `Level ${readingLvl} / ${maxScale}`;
+  readingBar.style.width = `${(readingLvl / maxScale) * 100}%`;
   readingDesc.textContent = DIFFICULTY_TIERS[readingLvl]?.description || '';
 
   // SEL Level
-  const selLvl = appState.levels.sel;
-  selLabel.textContent = `Level ${selLvl} / 5`;
-  selBar.style.width = `${(selLvl / 5) * 100}%`;
+  selLabel.textContent = `Level ${selLvl} / ${maxScale}`;
+  selBar.style.width = `${(selLvl / maxScale) * 100}%`;
   selDesc.textContent = DIFFICULTY_TIERS[selLvl]?.description || '';
 }
 
@@ -716,7 +804,7 @@ Levels: Math Lvl ${appState.levels.math} | Verbal Lvl ${appState.levels.reading}
   txt += `--------------------------------------------------\n`;
   const currentMathIds = appState.currentQuest.mathIds || [];
   currentMathIds.forEach((id, index) => {
-    const q = MATH_MATRIX[appState.levels.math]?.find(item => item.id === id);
+    const q = findQuestionById(MATH_MATRIX, id);
     if (!q) return;
     txt += `Q${index + 1}. ${q.text}\n`;
     if (q.options) {
@@ -732,7 +820,7 @@ Levels: Math Lvl ${appState.levels.math} | Verbal Lvl ${appState.levels.reading}
   txt += `--------------------------------------------------\n`;
   const currentReadingIds = appState.currentQuest.readingIds || [];
   currentReadingIds.forEach((id, index) => {
-    const q = READING_MATRIX[appState.levels.reading]?.find(item => item.id === id);
+    const q = findQuestionById(READING_MATRIX, id);
     if (!q) return;
     txt += `Q${index + 1}. ${q.text}\n`;
     if (showMandarin && q.translation) {
@@ -758,10 +846,10 @@ Levels: Math Lvl ${appState.levels.math} | Verbal Lvl ${appState.levels.reading}
     txt += `   [Parent Answer Key: ${q.answer}]\n\n`;
   });
 
-  // 3. SEL block text
+  // 3. Reading block text
   txt += `BLOCK 3: Social-Emotional Intelligence (${DIFFICULTY_TIERS[appState.levels.sel]?.name || `Level ${appState.levels.sel}`})\n`;
   txt += `--------------------------------------------------\n`;
-  const qSel = SEL_MATRIX[appState.levels.sel]?.find(item => item.id === appState.currentQuest.selId);
+  const qSel = findQuestionById(SEL_MATRIX, appState.currentQuest.selId);
   if (qSel) {
     txt += `Daily Challenge: ${qSel.text}\n`;
     if (showMandarin && qSel.translation) {
@@ -839,7 +927,7 @@ function escapeHtml(unsafe) {
 window.adjustLevel = function(type, delta) {
   if (!appState) return;
   const currentLvl = appState.levels[type] || 1;
-  const newLvl = Math.max(1, Math.min(5, currentLvl + delta));
+  const newLvl = Math.max(1, Math.min(10, currentLvl + delta));
   if (newLvl === currentLvl) return; // No change
   
   appState.levels[type] = newLvl;
