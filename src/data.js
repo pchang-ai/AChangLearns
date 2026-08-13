@@ -133,17 +133,17 @@ export const MATH_MATRIX = {
     },
     {
       id: "m2_5",
-      text: "Solve this shape matrix:\n\n+---------------+---------------+\n| o (Small Cir) | O (Large Cir) |\n+---------------+---------------+\n| x (Small X)   |     [ ? ]     |\n+---------------+---------------+",
-      options: ["A) X (Large X)", "B) x (Small X)", "C) o (Small Cir)", "D) O (Large Cir)", "E) + (Small Plus)"],
+      text: "Solve this shape matrix:\n\n+---------------+---------------+\n|   o (Small)   |   O (Large)   |\n+---------------+---------------+\n|   x (Small)   |     [ ? ]     |\n+---------------+---------------+",
+      options: ["A) X (Large X)", "B) x (Small X)", "C) o (Small Circle)", "D) O (Large Circle)", "E) + (Small Plus)"],
       answer: "A) X (Large X)",
       parentPrompt: "Ask: 'Look at the top row. A small circle grows into a large circle. Now look at the bottom row. A small X should grow into what?'",
       elimination: "The shape must remain an X, just larger. Eliminate options C, D, and E because they are wrong shapes."
     },
     {
       id: "m2_6",
-      text: "Solve this shape matrix:\n\n+----------------+----------------+\n| ( ) (Empty Cir)| (X) (Shaded Cir)|\n+----------------+----------------+\n| [ ] (Empty Sq) |     [ ? ]      |\n+----------------+----------------+",
-      options: ["A) [X] (Shaded Sq)", "B) [ ] (Empty Sq)", "C) (X) (Shaded Cir)", "D) ( ) (Empty Cir)", "E) + (Plus)"],
-      answer: "A) [X] (Shaded Sq)",
+      text: "Solve this shape matrix:\n\n+---------------+---------------+\n|   ○ (Circle)  |  ⬤ (Shaded)   |\n+---------------+---------------+\n|   □ (Square)  |     [ ? ]     |\n+---------------+---------------+",
+      options: ["A) ■ (Shaded Square)", "B) □ (Empty Square)", "C) ● (Shaded Circle)", "D) ○ (Empty Circle)", "E) + (Plus)"],
+      answer: "A) ■ (Shaded Square)",
       parentPrompt: "Ask: 'Look at the top row. The circle gets filled with an X (shaded). Now look at the bottom row. How should the empty square change?'",
       elimination: "The shape must stay a square. Eliminate circle options C and D. It must be shaded, so eliminate empty square B."
     },
@@ -231,15 +231,15 @@ export const MATH_MATRIX = {
     },
     {
       id: "m3_7",
-      text: "Solve this shape matrix:\n\n+-------------------+--------------------+\n| o (Small Circle)  | oo (Two Sm Circles)|\n+-------------------+--------------------+\n| + (Small Plus)    |       [ ? ]        |\n+-------------------+--------------------+",
-      options: ["A) ++ (Two Sm Pluses)", "B) + (One Plus)", "C) o (One Circle)", "D) # (Grid)", "E) = (Equals)"],
-      answer: "A) ++ (Two Sm Pluses)",
+      text: "Solve this shape matrix:\n\n+---------------+---------------+\n|       ○       |      ○ ○      |\n+---------------+---------------+\n|       +       |     [ ? ]     |\n+---------------+---------------+",
+      options: ["A) + + (Two Pluses)", "B) + (One Plus)", "C) ○ (One Circle)", "D) # (Grid)", "E) = (Equals)"],
+      answer: "A) + + (Two Pluses)",
       parentPrompt: "Ask: 'Look at the top row. One circle becomes two circles. Now look at the bottom row. One plus sign should become what?'",
       elimination: "The shape type doesn't change, only the count doubles. The shape must remain plus signs. Eliminate circle option C."
     },
     {
       id: "m3_8",
-      text: "Solve this shape matrix:\n\n+-------------------+--------------------+\n| ▲ (Point Up Tri)  | ▼ (Point Dn Tri)   |\n+-------------------+--------------------+\n| L (Letter L)      |       [ ? ]        |\n+-------------------+--------------------+",
+      text: "Solve this shape matrix:\n\n+---------------+---------------+\n|       ▲       |       ▼       |\n+---------------+---------------+\n|       L       |     [ ? ]     |\n+---------------+---------------+",
       options: ["A) 7 (Inverted L)", "B) L (Normal L)", "C) Γ (Inverted L-flip)", "D) J (Letter J)", "E) ⏶ (Point Up Tri)"],
       answer: "A) 7 (Inverted L)",
       parentPrompt: "Ask: 'Look at the top row. The triangle points up, and then it flips to point down. What should happen to the letter L?'",
@@ -305,15 +305,15 @@ export const MATH_MATRIX = {
     },
     {
       id: "m4_6",
-      text: "Solve this shape matrix:\n\n+-------------------+--------------------+\n| O (Large Circle)  | o (Small Circle)   |\n+-------------------+--------------------+\n| [X] (Large Shd Sq)|       [ ? ]        |\n+-------------------+----+---------------+",
-      options: ["A) [x] (Small Shaded Sq)", "B) [X] (Large Shaded Sq)", "C) o (Small Circle)", "D) [ ] (Small Empty Sq)", "E) O (Large Circle)"],
-      answer: "A) [x] (Small Shaded Sq)",
+      text: "Solve this shape matrix:\n\n+---------------+---------------+\n|   ○ (Large)   |   o (Small)   |\n+---------------+---------------+\n|   ■ (Large)   |     [ ? ]     |\n+---------------+---------------+",
+      options: ["A) ▪ (Small Shaded Square)", "B) ■ (Large Shaded Square)", "C) o (Small Circle)", "D) □ (Small Empty Square)", "E) ○ (Large Circle)"],
+      answer: "A) ▪ (Small Shaded Square)",
       parentPrompt: "Ask: 'Look at the top row. A large circle becomes a small circle (it shrinks). What should happen to the large shaded square in the bottom row?'",
       elimination: "The shape must stay a shaded square, only smaller. Eliminate circle C and unshaded square D."
     },
     {
       id: "m4_7",
-      text: "Solve this shape matrix:\n\n+-------------------+--------------------+\n| / (Tilt Right)    | \\ (Tilt Left)      |\n+-------------------+--------------------+\n| p (Letter p)      |       [ ? ]        |\n+-------------------+----+---------------+",
+      text: "Solve this shape matrix:\n\n+---------------+---------------+\n|       /       |       \\       |\n+---------------+---------------+\n|       p       |     [ ? ]     |\n+---------------+---------------+",
       options: ["A) q (Mirrored p)", "B) p (Normal p)", "C) d (Inverted p)", "D) b (Mirrored inverted p)", "E) o (Circle)"],
       answer: "A) q (Mirrored p)",
       parentPrompt: "Ask: 'Look at the top row. The slash tilts right, then tilts left (it is mirrored). What is the mirrored version of the letter p?'",
@@ -375,15 +375,15 @@ export const MATH_MATRIX = {
     },
     {
       id: "m5_3",
-      text: "Solve this shape matrix:\n\n+-------------------------+-------------------------+\n| o . (Circle, dot right) | . o (Circle, dot left)  |\n+-------------------------+-------------------------+\n| [ ] . (Square, dot R)   |           [ ? ]         |\n+-------------------------+-------------------------+",
+      text: "Solve this shape matrix:\n\n+---------------+---------------+\n|      ○ ∙      |      ∙ ○      |\n+---------------+---------------+\n|      □ ∙      |     [ ? ]     |\n+---------------+---------------+",
       options: [
-        "A) . [ ] (Square, dot left)",
-        "B) [ ] . (Square, dot right)",
-        "C) . o (Circle, dot left)",
-        "D) o . (Circle, dot right)",
-        "E) [ ] (Square, no dot)"
+        "A) ∙ □ (Square, dot left)",
+        "B) □ ∙ (Square, dot right)",
+        "C) ∙ ○ (Circle, dot left)",
+        "D) ○ ∙ (Circle, dot right)",
+        "E) □ (Square, no dot)"
       ],
-      answer: "A) . [ ] (Square, dot left)",
+      answer: "A) ∙ □ (Square, dot left)",
       parentPrompt: "Ask: 'Look at the top row. The dot moves from the right side of the circle to the left side (horizontal flip). What should happen to the dot next to the square in the bottom row?'",
       elimination: "The shape must stay a square. Eliminate circle options C and D. The dot must flip sides. Eliminate B."
     },
@@ -411,7 +411,7 @@ export const MATH_MATRIX = {
     },
     {
       id: "m5_6",
-      text: "Solve this shape matrix:\n\n+--------------------+---------------------+\n| ▲ (Shaded Point Up)| ▶ (Shaded Point R)  |\n+--------------------+---------------------+\n| ▽ (Empty Point Dn) |        [ ? ]        |\n+--------------------+---------------------+",
+      text: "Solve this shape matrix:\n\n+---------------+---------------+\n|       ▲       |       ▶       |\n+---------------+---------------+\n|       ▽       |     [ ? ]     |\n+---------------+---------------+",
       options: [
         "A) ◀ (Empty Point L)",
         "B) ▶ (Shaded Point R)",

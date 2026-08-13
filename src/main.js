@@ -7,6 +7,15 @@ function cleanOptionText(opt) {
   return opt.replace(/^[A-E]\)\s*/, '').trim();
 }
 
+// Strips leading testing jargon prefixes from question texts for the student view
+function cleanQuestionText(text) {
+  if (!text) return '';
+  return text
+    .replace(/^(Symbolic Balance|Multi-Variable Balance|Symbolic Equation|Scale Balance|Advanced Balance|Quantitative Classification|Symbolic Addition|Symbolic Subtraction|Symbolic Equation|Pattern Series)\s*:\s*\n?/i, '')
+    .replace(/^(Iowa Analogy\s*(\([^\)]+\))?|Phonics\s*(\([^\)]+\))?)\s*:\s*\n?/i, '')
+    .trim();
+}
+
 // Helper to shuffle choices in the UI
 function shuffleArray(array) {
   const arr = [...array];
@@ -461,7 +470,7 @@ function renderQuest() {
         ${patternHtml}
       `;
     } else {
-      html = `<p class="text-base sm:text-lg font-bold text-slate-900">Q${index + 1}. <span class="font-medium text-slate-800 handwritten">${escapeHtml(q.text).replace(/\n/g, '<br>')}</span></p>`;
+      html = `<p class="text-base sm:text-lg font-bold text-slate-900">Q${index + 1}. <span class="font-medium text-slate-800 handwritten">${escapeHtml(cleanQuestionText(q.text)).replace(/\n/g, '<br>')}</span></p>`;
     }
 
     // Render options if they exist
@@ -528,7 +537,7 @@ function renderQuest() {
         <p class="text-base sm:text-lg font-bold text-slate-900">Q${index + 1}. <span class="font-medium text-slate-800 handwritten">${escapeHtml(question)}</span></p>
       `;
     } else {
-      html += `<p class="text-base sm:text-lg font-bold text-slate-900">Q${index + 1}. <span class="font-medium text-slate-800 handwritten">${escapeHtml(q.text)}</span></p>`;
+      html += `<p class="text-base sm:text-lg font-bold text-slate-900">Q${index + 1}. <span class="font-medium text-slate-800 handwritten">${escapeHtml(cleanQuestionText(q.text))}</span></p>`;
     }
 
     // Render Mandarin translation if active and translation exists
@@ -806,7 +815,7 @@ Levels: Math Lvl ${appState.levels.math} | Verbal Lvl ${appState.levels.reading}
   currentMathIds.forEach((id, index) => {
     const q = findQuestionById(MATH_MATRIX, id);
     if (!q) return;
-    txt += `Q${index + 1}. ${q.text}\n`;
+    txt += `Q${index + 1}. ${cleanQuestionText(q.text)}\n`;
     if (q.options) {
       txt += `   Options: ${q.options.join(', ')}\n`;
     }
@@ -822,7 +831,7 @@ Levels: Math Lvl ${appState.levels.math} | Verbal Lvl ${appState.levels.reading}
   currentReadingIds.forEach((id, index) => {
     const q = findQuestionById(READING_MATRIX, id);
     if (!q) return;
-    txt += `Q${index + 1}. ${q.text}\n`;
+    txt += `Q${index + 1}. ${cleanQuestionText(q.text)}\n`;
     if (showMandarin && q.translation) {
       txt += `   Chinese: ${q.translation.chinese}\n`;
       txt += `   Pinyin: ${q.translation.pinyin}\n`;
